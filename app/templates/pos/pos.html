@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Point of Sale</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="bg-gray-100">
+
+<div class="container mx-auto p-4">
+
+    <h1 class="text-2xl mb-4">Point of Sale</h1>
+
+    <!-- Search form -->
+    <div class="mb-4">
+        <label for="searchInput" class="block">Search Product:</label>
+        <input type="text" id="searchInput" placeholder="Enter product name or barcode" class="border p-2 rounded-md w-full" onkeyup="searchProducts()">
+    </div>
+
+    <!-- Search results -->
+    <div id="searchResults" class="mb-4">
+        <!-- Results will be displayed here -->
+    </div>
+
+    <!-- Sale items -->
+    <div id="saleItems" class="mb-4">
+        <h2 class="text-xl mb-2">Sale Items</h2>
+        <table class="min-w-full border-collapse border border-gray-300">
+            <thead>
+                <tr>
+                    <th class="border p-2">Product</th>
+                    <th class="border p-2">Quantity</th>
+                    <th class="border p-2">Price</th>
+                    <th class="border p-2">Total</th>
+                </tr>
+            </thead>
+            <tbody id="saleItemList">
+                <!-- Sale items will be displayed here -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Discount and Total -->
+    <div class="mb-4">
+        <label for="discountInput" class="block">Discount (%):</label>
+        <input type="number" id="discountInput" min="0" max="100" value="0" class="border p-2 rounded-md w-full" onchange="calculateTotal()">
+        <br>
+        <label for="totalAmount" class="block mt-2">Total Amount:</label>
+        <input type="text" id="totalAmount" readonly class="border p-2 rounded-md w-full">
+    </div>
+
+    <!-- Amount Paid and Change Due -->
+    <div class="mb-4">
+        <label for="amountPaidInput" class="block">Amount Paid:</label>
+        <input type="number" id="amountPaidInput" min="0" class="border p-2 rounded-md w-full" onchange="calculateChange()">
+        <br>
+        <label for="changeDue" class="block mt-2">Change Due:</label>
+        <input type="text" id="changeDue" readonly class="border p-2 rounded-md w-full">
+    </div>
+    <div class="mb-4">
+        <label for="commissionRateInput" class="block">Employee Commission Rate (%):</label>
+        <input type="number" id="commissionRateInput" min="0" max="100" value="0" class="border p-2 rounded-md w-full" onchange="calculateCommission()">
+        <br>
+        <label for="commissionAmount" class="block mt-2">Commission Amount:</label>
+        <input type="text" id="commissionAmount" readonly class="border p-2 rounded-md w-full">
+    </div>
+    
+
+
+</div>
+
+<script>
+    // ... (previous JavaScript code remains unchanged)
+
+    function calculateChange() {
+        let totalAmount = parseFloat($('#totalAmount').val().split('$')[1]);
+        let amountPaid = parseFloat($('#amountPaidInput').val());
+        let changeDue = amountPaid - totalAmount;
+
+        $('#changeDue').val('$' + changeDue.toFixed(2));
+    }
+
+    // Add event listener to amount paid input field
+    $('#amountPaidInput').on('input', function() {
+        calculateChange();
+    });
+
+</script>
+
+<script>
+    function searchProducts() {
+        let searchTerm = $('#searchInput').val();
+
+        $.ajax({
+            url: '/pos/search_products',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ searchTerm: searchTerm }),
+            success: function(response) {
+                displaySearchResults(response);
+            },
+            error: function(error) {
+                console.error('Error searching products:', error);
+            }
+        });
+    }
+
+    function displaySearchResults(results) {
+        let resultList = $('#searchResults');
+        resultList.empty();
+
+        if (results.length === 0) {
+            resultList.append('<p>No products found</p>');
+            return;
+        }
+
+        let listHtml = '<ul>';
+        results.forEach(function(product) {
+            listHtml += `<li>
+                            <button class="selectProductBtn" data-name="${product.name}" data-barcode="${product.barcode}" data-price="${product.selling_price}">
+                                ${product.name} (${product.barcode}) - $${product.selling_price}
+                            </button>
+                        </li>`;
+        });
+        listHtml += '</ul>';
+
+        resultList.append(listHtml);
+
+        // Add event listener to select product buttons
+        $('.selectProductBtn').click(function() {
+            let name = $(this).data('name');
+            let barcode = $(this).data('barcode');
+            let price = $(this).data('price');
+            addToSale(name, barcode, price);
+        });
+    }
+
+    function addToSale(name, barcode, price) {
+        let saleItemList = $('#saleItemList');
+        let newRow = `
+            <tr>
+                <td>${name} (${barcode})</td>
+                <td><input type="number" class="quantityInput" value="1" min="1" onchange="calculateTotal()"></td>
+                <td>$${price}</td>
+                <td class="totalCell">$${price}</td>
+            </tr>`;
+        
+        saleItemList.append(newRow);
+        calculateTotal();
+    }
+
+// ...
+
+function calculateTotal() {
+    let total = 0;
+
+    $('#saleItemList tr').each(function() {
+        let price = parseFloat($(this).find('td:nth-child(3)').text().split('$')[1]);
+        let quantity = parseInt($(this).find('.quantityInput').val());
+        let totalPerItem = price * quantity;
+
+        $(this).find('.totalCell').text('$' + totalPerItem.toFixed(2));
+        total += totalPerItem;
+    });
+
+    let discount = parseFloat($('#discountInput').val());
+    let discountAmount = (total * discount) / 100;
+    let totalAmount = total - discountAmount;
+
+    $('#totalAmount').val('$' + totalAmount.toFixed(2));
+}
+
+// Add event listener to quantity input fields
+$(document).on('input', '.quantityInput', function() {
+    calculateTotal();
+});
+
+// Add event listener to discount input field
+$('#discountInput').on('change', function() {
+    calculateTotal();
+});
+
+// ...
+
+</script>
+<script>
+    // ... (previous JavaScript code remains unchanged)
+
+    function calculateCommission() {
+        let commissionRate = parseFloat($('#commissionRateInput').val());
+        let amountPaid = parseFloat($('#amountPaidInput').val());
+        let commissionAmount = (amountPaid * commissionRate) / 100;
+
+        $('#commissionAmount').val('$' + commissionAmount.toFixed(2));
+        calculateChange();
+    }
+
+    // Add event listener to commission rate input field
+    $('#commissionRateInput').on('input', function() {
+        calculateCommission();
+    });
+
+</script>
+
+</body>
+</html>
+
+
+
