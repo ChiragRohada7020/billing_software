@@ -42,6 +42,8 @@
             <td class="p-4 w-1/4">Price</td>
             <td class="p-4 w-1/4">Quantity</td>
             <td class="p-4 w-1/4">Subtotal</td>
+            <td class="p-4 w-1/4"></td>
+
         </tr>
     </thead>
 <!-- Remove the nasty inline CSS fixed height on production and replace it with a CSS class — this is just for demonstration purposes! -->
@@ -256,7 +258,7 @@ function addProductToSale(product) {
         existingProduct.quantity += 1; // Increment quantity
         existingProduct.subtotal = existingProduct.quantity * existingProduct.selling_price; 
         totalAmount = parseFloat(totalAmount) + parseFloat(existingProduct.selling_price); // Increment total amount
-        document.getElementById('totalAmount').innerText = totalAmount;
+        document.getElementById('totalAmount').innerText = parseFloat(totalAmount);
 
 // Update subtotal
     } else {
@@ -264,7 +266,7 @@ function addProductToSale(product) {
         product.quantity = 1;
         product.subtotal = product.selling_price;
         totalAmount = parseFloat(totalAmount) + parseFloat(product.selling_price); // Increment total amount
-        document.getElementById('totalAmount').innerText = totalAmount;
+        document.getElementById('totalAmount').innerText = parseFloat(totalAmount);
 
 
         saleItems.push(product);
@@ -322,13 +324,15 @@ function renderSaleItems() {
         const productQuantityCell = document.createElement('td');
         productQuantityCell.classList.add('p-4', 'w-1/4');
         productQuantityCell.innerHTML = `
-            <div>
+            <div class="flex">
                 <button class="decrementBtn bg-purple-600 px-2 py-1 text-white font-bold rounded-md rounded-r-none">-</button>
                 <label class="quantityLabel px-4">${product.quantity}</label>
                 <button class="incrementBtn bg-purple-600 px-2 py-1 text-white font-bold rounded-md rounded-l-none">+</button>
             </div>
         `;
         row.appendChild(productQuantityCell);
+
+
 
         // Subtotal
         const subtotalCell = document.createElement('td');
@@ -337,6 +341,13 @@ function renderSaleItems() {
         row.appendChild(subtotalCell);
 
         tbody.appendChild(row);
+
+        const deleteBtnCell = document.createElement('td');
+deleteBtnCell.classList.add('p-4', 'w-1/4');
+deleteBtnCell.innerHTML = `
+    <button class="deleteBtn bg-red-600 px-2 py-1 text-white font-bold rounded-md">Delete</button>
+`;
+row.appendChild(deleteBtnCell);
 
         // Add event listeners to increment and decrement buttons
         const decrementBtn = row.querySelector('.decrementBtn');
@@ -360,15 +371,34 @@ function renderSaleItems() {
             product.subtotal = product.quantity * product.selling_price;
             subtotalCell.textContent = product.subtotal;
             totalAmount = parseFloat(totalAmount) + parseFloat(product.selling_price); // Increment total amount
-            document.getElementById('totalAmount').innerText = totalAmount;
+            document.getElementById('totalAmount').innerText = parseFloat(totalAmount);
         });
+
+        
+const deleteBtn = row.querySelector('.deleteBtn');
+
+deleteBtn.addEventListener('click', () => {
+    removeProductFromSale(index);
+});
     });
 }
 
 
 </script>
 
+<script>
+    function removeProductFromSale(index) {
+    // Remove the product from the saleItems array
+    const removedProduct = saleItems.splice(index, 1)[0]; // Remove product from array
+    totalAmount -= removedProduct.subtotal; // Subtract subtotal from totalAmount
+    updateTotalPayable(); // Update the total payable amount in UI
 
+    // Re-render the sale items
+    renderSaleItems();
+
+    // Update the total payable amount
+}
+</script>
 <script>
 // Function to fetch product suggestions
 function fetchProducts(searchTerm) {
@@ -501,12 +531,12 @@ function updateTotalPayable() {
 
     // Calculate total amount from sale items
     saleItems.forEach(item => {
-        total += item.subtotal;
+        total += parseFloat(item.subtotal);
     });
-    total += total * (gst / 100);
+    total += parseFloat(total * (gst / 100));
 
     // Apply discount
-    discount = (total * discount) / 100;
+    discount = parseFloat((total * discount) / 100);
 
     total -= discount;
 
@@ -516,7 +546,7 @@ function updateTotalPayable() {
     total -= due;
 
     // Update total amount in UI
-    document.getElementById('totalAmount').innerText = total.toFixed(2);
+    document.getElementById('totalAmount').innerText = total;
 }
 
 // Event listener for discount input
