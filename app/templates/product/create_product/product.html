@@ -1,46 +1,8 @@
-<!-- templates/product.html -->
+{% extends "./index.html" %}
+{% block content %}
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product View</title>
-    <!-- Include Tailwind CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <script>
-        function toggleOtherCategory() {
-            const select = document.getElementById('category');
-            const otherCategoryInput = document.getElementById('otherCategoryInput');
-            
-            if (select.value === 'other') {
-                otherCategoryInput.style.display = 'block';
-            } else {
-                otherCategoryInput.style.display = 'none';
-            }
-        }
-    </script>
-    
-<script>
-    // ... Existing JavaScript code ...
-
-    function toggleOtherBrand() {
-        const select = document.getElementById('brand');
-        const otherBrandInput = document.getElementById('otherBrandInput');
-        
-        if (select.value === 'other') {
-            otherBrandInput.style.display = 'block';
-        } else {
-            otherBrandInput.style.display = 'none';
-        }
-    }
-</script>
-
-</head>
-
-<body class="bg-gray-100">
-    <div class="container mx-auto px-4 py-8">
+      <!-- Content -->
+       <div> <div class="container mx-auto px-4 py-8">
         <div class="bg-white rounded-lg shadow-md p-6">
             <h2 class="text-2xl font-semibold mb-4">Product Details</h2>
             
@@ -112,8 +74,6 @@
                 </div>
             </form>
         </div>
-    </div>
-</body>
-
-
-</html>
+    </div></div>
+      <!-- End Content -->
+      {% endblock %}

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,205 +7,527 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-<body class="bg-gray-100">
+<body class="bg-white">
+    <div class="justify-center mx-auto">
+        <nav>
 
-<div class="container mx-auto p-4">
+        </nav>
 
-    <h1 class="text-2xl mb-4">Point of Sale</h1>
 
-    <!-- Search form -->
-    <div class="mb-4">
-        <label for="searchInput" class="block">Search Product:</label>
-        <input type="text" id="searchInput" placeholder="Enter product name or barcode" class="border p-2 rounded-md w-full" onkeyup="searchProducts()">
+               <main class="" id="main">
+
+            <div class="grid grid-cols-2 ">
+
+                <first_Grid><div>
+                    <div class="flex flex-col p-5 pl-2">
+                        <div class="p-2 flex flex-row"> 
+                            <select   onclick="fetchCustomers()"  class="block w-full p-2 text-gray-900  font-sans font-semibold uppercase    border-2 border-gray-400 bg-white text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" name="" id="showcustmoer">
+                                <option value="Walk-IN-Customer">Walk-IN-Customer</option>
+                            </select>
+                            <button onclick="AddCustomers() " class="bg-purple-500 text-white font-bold rounded-lg rounded-l-none px-5 py-1 text-xl">+</button>
+                            <!-- <img onclick="AddCustomers() " class="w-8 h-8 cursor-pointer" c src="https://cdn4.iconfinder.com/data/icons/media-buttons/512/add-512.png" alt=""> -->
+                        </div>
+
+                       
+                        
+
+                        <div class="p-2">
+                            <!-- component -->
+<div class="container">
+
+<table class="sale-items text-left text-sm w-full">
+    <thead class=" bg-grey-light flex text-black font-bold w-full">
+        <tr class="flex w-full ">
+            <td class="p-4 w-1/4">Product</td>
+            <td class="p-4 w-1/4">Price</td>
+            <td class="p-4 w-1/4">Quantity</td>
+            <td class="p-4 w-1/4">Subtotal</td>
+        </tr>
+    </thead>
+<!-- Remove the nasty inline CSS fixed height on production and replace it with a CSS class — this is just for demonstration purposes! -->
+    <tbody class=" flex flex-col items-center  overflow-y-scroll w-full" style="height: 45vh;">
+        
+        
+    </tbody>
+</table>
+
+<div class="bg-blue-200 px-5 py-2 text-center">
+   <label class="font-bold " for="">Total Payable  :- ₹ </label> <span id="totalAmount" class="  text-blue-800 text-lg   font-semibold me-2  rounded dark:bg-blue-900 dark:text-blue-300">0</span>
+
+</div>  
+
+<div class="grid grid-cols-3 mt-5 text-sm font-semibold ">
+    <div class="flex flex-col w-32 gap-2">
+        <label for="">GST (%)</label>
+        <input id="gstInput" type="text" class="bg-gray-200 border-black border-2 p-1 rounded-lg">
     </div>
-
-    <!-- Search results -->
-    <div id="searchResults" class="mb-4">
-        <!-- Results will be displayed here -->
+    <div class="flex flex-col w-32 gap-2">
+        <label for="">Discount (₹)</label>
+        <input id="discountInput" type="text" class="bg-gray-200 border-black border-2 p-1 rounded-lg">
     </div>
-
-    <!-- Sale items -->
-    <div id="saleItems" class="mb-4">
-        <h2 class="text-xl mb-2">Sale Items</h2>
-        <table class="min-w-full border-collapse border border-gray-300">
-            <thead>
-                <tr>
-                    <th class="border p-2">Product</th>
-                    <th class="border p-2">Quantity</th>
-                    <th class="border p-2">Price</th>
-                    <th class="border p-2">Total</th>
-                </tr>
-            </thead>
-            <tbody id="saleItemList">
-                <!-- Sale items will be displayed here -->
-            </tbody>
-        </table>
+    <div class="flex flex-col w-32 gap-2">
+        <label for="">DUE (₹)</label>
+        <input  id="dueInput" type="text" class="bg-gray-200 border-black border-2 p-1 rounded-lg">
     </div>
-
-    <!-- Discount and Total -->
-    <div class="mb-4">
-        <label for="discountInput" class="block">Discount (%):</label>
-        <input type="number" id="discountInput" min="0" max="100" value="0" class="border p-2 rounded-md w-full" onchange="calculateTotal()">
-        <br>
-        <label for="totalAmount" class="block mt-2">Total Amount:</label>
-        <input type="text" id="totalAmount" readonly class="border p-2 rounded-md w-full">
-    </div>
-
-    <!-- Amount Paid and Change Due -->
-    <div class="mb-4">
-        <label for="amountPaidInput" class="block">Amount Paid:</label>
-        <input type="number" id="amountPaidInput" min="0" class="border p-2 rounded-md w-full" onchange="calculateChange()">
-        <br>
-        <label for="changeDue" class="block mt-2">Change Due:</label>
-        <input type="text" id="changeDue" readonly class="border p-2 rounded-md w-full">
-    </div>
-    <div class="mb-4">
-        <label for="commissionRateInput" class="block">Employee Commission Rate (%):</label>
-        <input type="number" id="commissionRateInput" min="0" max="100" value="0" class="border p-2 rounded-md w-full" onchange="calculateCommission()">
-        <br>
-        <label for="commissionAmount" class="block mt-2">Commission Amount:</label>
-        <input type="text" id="commissionAmount" readonly class="border p-2 rounded-md w-full">
-    </div>
-    
-
-
 </div>
 
-<script>
-    // ... (previous JavaScript code remains unchanged)
+<div class="mt-5 flex gap-5">
+    <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">PayNow</button>
+    <button type="button" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Draft</button>
 
-    function calculateChange() {
-        let totalAmount = parseFloat($('#totalAmount').val().split('$')[1]);
-        let amountPaid = parseFloat($('#amountPaidInput').val());
-        let changeDue = amountPaid - totalAmount;
+</div>
+</div>
+                        </div>
+                    </div>
+                </div></first_Grid>
 
-        $('#changeDue').val('$' + changeDue.toFixed(2));
-    }
+                <second_Crid class="bg-white">
+                     
 
-    // Add event listener to amount paid input field
-    $('#amountPaidInput').on('input', function() {
-        calculateChange();
-    });
+        <add_customer id="addcustomerform" class="hidden">
+                
+            <!-- component -->
+            <section class="max-w-4xl p-6 mx-auto bg-gray-700 rounded-md shadow-md dark:bg-gray-800 mt-20">
+                <h1 class="text-lg font-bold text-white capitalize dark:text-white">Add Customer</h1>
+                    <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2 text-xs">
+                        <div>
+                            <label class="text-white dark:text-gray-200" for="username">Username</label>
+                            <input id="username" type="text" class="block w-full px-2 py-1 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
+                        </div>
+            
+                        <div>
+                            <label class="text-white dark:text-gray-200" for="emailAddress">Email Address</label>
+                            <input id="emailAddress" type="email" class="block w-full px-2 py-1 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
+                        </div>
+                        <div>
+                            <label class="text-white dark:text-gray-200" for="emailAddress">Mobile Number</label>
+                            <input id="mobile" type="number" class="block w-full px-2 py-1 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
+                        </div>
+            
+                      
+                       
+                       
+                        <div>
+                            <label class="text-white dark:text-gray-200" for="passwordConfirmation">DOB</label>
+                            <input id="date" type="date" class="block w-full px-2 py-1 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
+                        </div>
+                        <div>
+                            <label class="text-white dark:text-gray-200" for="passwordConfirmation">Text Area</label>
+                            <textarea id="textarea" type="textarea" class="block w-full px-2  mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"></textarea>
+                        </div>
+                    </div>
 
-</script>
+                   <div class="flex  gap-5">
+                    <div class="flex justify-end mt-6">
+                        <button onclick="reverseaddcustomer()" class="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:bg-gray-600">Cancel</button>
+                    </div>
+            
+                    <div class="flex justify-end mt-6">
+                        <button onclick="saveCustomer()" class="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:bg-gray-600">Save</button>
+                    </div>
+                   </div>
+            </section>
+            
+              
+                                </add_customer>
 
-<script>
-    function searchProducts() {
-        let searchTerm = $('#searchInput').val();
-
-        $.ajax({
-            url: '/pos/search_products',
-            method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({ searchTerm: searchTerm }),
-            success: function(response) {
-                displaySearchResults(response);
-            },
-            error: function(error) {
-                console.error('Error searching products:', error);
-            }
-        });
-    }
-
-    function displaySearchResults(results) {
-        let resultList = $('#searchResults');
-        resultList.empty();
-
-        if (results.length === 0) {
-            resultList.append('<p>No products found</p>');
-            return;
-        }
-
-        let listHtml = '<ul>';
-        results.forEach(function(product) {
-            listHtml += `<li>
-                            <button class="selectProductBtn" data-name="${product.name}" data-barcode="${product.barcode}" data-price="${product.selling_price}">
-                                ${product.name} (${product.barcode}) - $${product.selling_price}
-                            </button>
-                        </li>`;
-        });
-        listHtml += '</ul>';
-
-        resultList.append(listHtml);
-
-        // Add event listener to select product buttons
-        $('.selectProductBtn').click(function() {
-            let name = $(this).data('name');
-            let barcode = $(this).data('barcode');
-            let price = $(this).data('price');
-            addToSale(name, barcode, price);
-        });
-    }
-
-    function addToSale(name, barcode, price) {
-        let saleItemList = $('#saleItemList');
-        let newRow = `
-            <tr>
-                <td>${name} (${barcode})</td>
-                <td><input type="number" class="quantityInput" value="1" min="1" onchange="calculateTotal()"></td>
-                <td>$${price}</td>
-                <td class="totalCell">$${price}</td>
-            </tr>`;
+                    <div>
+                        <!-- component -->
+<content id="second_content">
+    
+    <div class="p-2 mt-5 w-full"> 
+                            
+        <div class='w-full px-2 '>
+            <div class="relative flex items-center w-full h-12 rounded-lg focus-within:shadow-lg bg-gray-100 overflow-hidden">
+                <div class="grid place-items-center h-full w-12 text-gray-800">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
         
-        saleItemList.append(newRow);
-        calculateTotal();
+                <input
+                class="peer h-full w-full outline-none text-sm bg-gray-100 text-black pr-2"
+                type="text"
+                id="search_product"
+                placeholder="Search something.." /> 
+            </div>
+            <div id="productSuggestions"></div>
+        
+        </div>
+    </div>
+</div>
+</content>
+                </second_Crid>
+
+            
+            </div>
+        </main>
+    </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+document.getElementById('incrementBtn').addEventListener('click', function() {
+    let quantityLabel = document.getElementById('quantityLabel');
+    let currentQuantity = parseInt(quantityLabel.innerText);
+    quantityLabel.innerText = currentQuantity + 1;
+    calculateSubtotal(this.closest('tr')); // Recalculate subtotal
+});
+
+document.getElementById('decrementBtn').addEventListener('click', function() {
+    let quantityLabel = document.getElementById('quantityLabel');
+    let currentQuantity = parseInt(quantityLabel.innerText);
+    if (currentQuantity > 1) {
+        quantityLabel.innerText = currentQuantity - 1;
+        calculateSubtotal(this.closest('tr')); // Recalculate subtotal
     }
+});
+});
 
-// ...
-
-function calculateTotal() {
-    let total = 0;
-
-    $('#saleItemList tr').each(function() {
-        let price = parseFloat($(this).find('td:nth-child(3)').text().split('$')[1]);
-        let quantity = parseInt($(this).find('.quantityInput').val());
-        let totalPerItem = price * quantity;
-
-        $(this).find('.totalCell').text('$' + totalPerItem.toFixed(2));
-        total += totalPerItem;
-    });
-
-    let discount = parseFloat($('#discountInput').val());
-    let discountAmount = (total * discount) / 100;
-    let totalAmount = total - discountAmount;
-
-    $('#totalAmount').val('$' + totalAmount.toFixed(2));
+function calculateSubtotal(row) {
+let price = parseFloat(row.querySelector('td:nth-child(2)').innerText.trim());
+let quantity = parseInt(row.querySelector('#quantityLabel').innerText.trim());
+let subtotal = price * quantity;
+row.querySelector('td:nth-child(4)').innerText = subtotal;
 }
 
-// Add event listener to quantity input fields
-$(document).on('input', '.quantityInput', function() {
-    calculateTotal();
-});
-
-// Add event listener to discount input field
-$('#discountInput').on('change', function() {
-    calculateTotal();
-});
-
-// ...
 
 </script>
+
 <script>
-    // ... (previous JavaScript code remains unchanged)
+let i=1
+function fetchCustomers() {
+fetch('/pos/search_customer')
+.then(response => response.json())
+.then(data => {
+    let customerInput = document.getElementById('showcustmoer'); 
 
-    function calculateCommission() {
-        let commissionRate = parseFloat($('#commissionRateInput').val());
-        let amountPaid = parseFloat($('#amountPaidInput').val());
-        let commissionAmount = (amountPaid * commissionRate) / 100;
-
-        $('#commissionAmount').val('$' + commissionAmount.toFixed(2));
-        calculateChange();
+    if (i==1)
+    {
+        data.forEach(customer => {
+        let option = document.createElement('option');
+        option.value = customer.id; // Assuming customer has an ID
+        option.innerText = customer.name; 
+        option.className="text-sm px-2 mt-2  "// Assuming customer has a name
+        customerInput.appendChild(option);
+    });
+    i=0
     }
 
-    // Add event listener to commission rate input field
-    $('#commissionRateInput').on('input', function() {
-        calculateCommission();
-    });
+
+
+    
+    // Assuming the data is an array of customer names
+    
+    
+});
+}function AddCustomers() {
+    i=1
+    document.getElementById('showcustmoer').innerHTML=""
+    let customerInput=document.getElementById('showcustmoer')
+    let option = document.createElement('option');
+    option.innerText = "Walk-In-Customer"; 
+    option.className="text-sm px-2 mt-2  "// Assuming customer has a name
+    customerInput.appendChild(option);
+
+    // Show the customer form and hide the main view
+    document.getElementById("addcustomerform").className = "block m-10";
+    document.getElementById("second_content").className = "hidden";
+
+}
+
+function reverseaddcustomer() {
+    // Hide the customer form and show the main view
+    document.getElementById("second_content").className = "block";
+    document.getElementById("addcustomerform").className = "hidden";
+    
+}
 
 </script>
 
+
+<script>
+let saleItems = []; // Global array to store sale items
+let totalAmount = 0;  // Initialize total amount
+
+function addProductToSale(product) {
+    // Check if the product already exists in saleItems
+    const existingProduct = saleItems.find(item => item.barcode === product.barcode);
+
+    if (existingProduct) {
+        existingProduct.quantity += 1; // Increment quantity
+        existingProduct.subtotal = existingProduct.quantity * existingProduct.selling_price; 
+        totalAmount = parseFloat(totalAmount) + parseFloat(existingProduct.selling_price); // Increment total amount
+        document.getElementById('totalAmount').innerText = totalAmount;
+
+// Update subtotal
+    } else {
+        // Add product to saleItems array with quantity of 1
+        product.quantity = 1;
+        product.subtotal = product.selling_price;
+        totalAmount = parseFloat(totalAmount) + parseFloat(product.selling_price); // Increment total amount
+        document.getElementById('totalAmount').innerText = totalAmount;
+
+
+        saleItems.push(product);
+    }
+
+
+
+
+    // Update sale items in the UI
+    renderSaleItems();
+
+}
+// function updateTotalAmount() {
+//     let total = 0;
+
+//     saleItems.forEach(item => {
+//         total += item.subtotal;
+//     });
+
+//     // Update total amount in UI
+//     document.getElementById('totalAmount').innerText = total.toFixed(2);
+// }
+
+</script>
+
+<script>
+function renderSaleItems() {
+    const tbody = document.querySelector('.sale-items tbody');
+    if (!tbody) return; // Exit if tbody is null
+
+    tbody.innerHTML = ''; // Clear previous sale items
+
+    saleItems.forEach((product, index) => {
+        const row = document.createElement('tr');
+        row.classList.add('flex', 'w-full', 'mb-4', 'bg-gray-200', 'font-normal');
+
+        // Product Name and Edit Button
+        const productNameCell = document.createElement('td');
+        productNameCell.classList.add('p-4', 'w-1/4');
+        productNameCell.innerHTML = `
+            <div class="flex flex-col gap-1"> 
+                <div>${product.name}</div>
+                <div class="bg-green-600 text-white w-max px-2 py-0.5 text-xs rounded-lg">edit</div>
+            </div>
+        `;
+        row.appendChild(productNameCell);
+
+        // Product Price
+        const productPriceCell = document.createElement('td');
+        productPriceCell.classList.add('p-4', 'w-1/4');
+        productPriceCell.textContent = product.selling_price;
+        row.appendChild(productPriceCell);
+
+        // Quantity and Buttons
+        const productQuantityCell = document.createElement('td');
+        productQuantityCell.classList.add('p-4', 'w-1/4');
+        productQuantityCell.innerHTML = `
+            <div>
+                <button class="decrementBtn bg-purple-600 px-2 py-1 text-white font-bold rounded-md rounded-r-none">-</button>
+                <label class="quantityLabel px-4">${product.quantity}</label>
+                <button class="incrementBtn bg-purple-600 px-2 py-1 text-white font-bold rounded-md rounded-l-none">+</button>
+            </div>
+        `;
+        row.appendChild(productQuantityCell);
+
+        // Subtotal
+        const subtotalCell = document.createElement('td');
+        subtotalCell.classList.add('p-4', 'w-1/4');
+        subtotalCell.textContent = product.subtotal;
+        row.appendChild(subtotalCell);
+
+        tbody.appendChild(row);
+
+        // Add event listeners to increment and decrement buttons
+        const decrementBtn = row.querySelector('.decrementBtn');
+        const incrementBtn = row.querySelector('.incrementBtn');
+        const quantityLabel = row.querySelector('.quantityLabel');
+
+        decrementBtn.addEventListener('click', () => {
+            if (product.quantity > 1) {
+                product.quantity--;
+                quantityLabel.textContent = product.quantity;
+                product.subtotal = product.quantity * product.selling_price;
+                subtotalCell.textContent = product.subtotal;
+                totalAmount = parseFloat(totalAmount) - parseFloat(product.selling_price); // Increment total amount
+                document.getElementById('totalAmount').innerText = totalAmount;
+            }
+        });
+
+        incrementBtn.addEventListener('click', () => {
+            product.quantity++;
+            quantityLabel.textContent = product.quantity;
+            product.subtotal = product.quantity * product.selling_price;
+            subtotalCell.textContent = product.subtotal;
+            totalAmount = parseFloat(totalAmount) + parseFloat(product.selling_price); // Increment total amount
+            document.getElementById('totalAmount').innerText = totalAmount;
+        });
+    });
+}
+
+
+</script>
+
+
+<script>
+// Function to fetch product suggestions
+function fetchProducts(searchTerm) {
+    fetch('/pos/search_products', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ searchTerm: searchTerm }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Populate product suggestions in a dropdown or list
+        const suggestionsList = document.getElementById('productSuggestions');
+        suggestionsList.innerHTML = ''; // Clear previous suggestions
+
+        const suggestionContainer = document.createElement('div');
+        suggestionContainer.classList.add('space-y-2'); // Add space between items
+
+        data.forEach(product => {
+            const listItem = document.createElement('button'); // Change to button
+            listItem.classList.add('block', 'w-full','text-sm', 'text-left', 'px-4', 'py-2', 'text-gray-800', 'bg-white', 'rounded-md', 'focus:outline-none', 'focus:bg-gray-200', 'hover:bg-gray-200');
+
+            // Remove default list point
+            listItem.style.listStyleType = 'none';
+
+            listItem.textContent = `${product.name} - ${product.barcode} - ${product.selling_price}`;
+            
+            listItem.addEventListener('click', () => {
+                addProductToSale(product);
+                document.getElementById('search_product').value = ''; // Clear input
+                suggestionsList.innerHTML = ''; // Clear suggestions
+
+                playBeep(); // Add product to sale when clicked
+            });
+
+            listItem.addEventListener('mouseover', () => {
+                listItem.classList.add('bg-gray-200'); // Change background when hovered
+            });
+
+            listItem.addEventListener('mouseout', () => {
+                listItem.classList.remove('bg-gray-200'); // Reset background when not hovered
+            });
+
+            suggestionContainer.appendChild(listItem);
+        });
+
+        suggestionsList.appendChild(suggestionContainer);
+
+        if (data.length === 1) {
+            addProductToSale(data[0]);
+            playBeep();
+            document.getElementById('search_product').value = ''; // Clear input
+            suggestionsList.innerHTML = ''; // Clear suggestions
+
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching products:', error);
+    });
+}
+
+// Event listener for search input
+document.getElementById('search_product').addEventListener('input', function(e) {
+    const searchTerm = e.target.value;
+    fetchProducts(searchTerm);
+});
+
+
+const beepSound = new Audio("{{ url_for('static', filename='audio/beep.mp3') }}");
+
+function playBeep() {
+    beepSound.play();
+}
+
+
+</script>
+
+
+
+<script>
+    function saveCustomer() {
+    // Get values from the form
+    const username = document.getElementById('username').value;
+    const emailAddress = document.getElementById('emailAddress').value;
+    const mobile = document.getElementById('mobile').value;
+    const date = document.getElementById('date').value;
+    const textarea = document.getElementById('textarea').value;
+
+    // Create a customer object
+    const customer = {
+        username: username,
+        email: emailAddress,
+        mobile: mobile,
+        dob: date,
+        notes: textarea
+    };
+
+    // Send the customer data to the Flask backend
+    fetch('/pos/add_customer', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(customer),
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Handle the response, e.g., show a success message or redirect
+        console.log(data);
+        alert('Customer added successfully!');
+    })
+    .catch(error => {
+        console.error('Error adding customer:', error);
+        alert('Error adding customer. Please try again.');
+    });
+}
+
+</script>
+
+
+<script>
+    // Function to calculate and update total payable
+// Function to calculate and update total payable
+function updateTotalPayable() {
+    let total = 0;
+    let discount = parseFloat(document.getElementById('discountInput').value) || 0;
+    let due = parseFloat(document.getElementById('dueInput').value) || 0;
+    let gst = parseFloat(document.getElementById('gstInput').value) || 0;
+
+    // Calculate total amount from sale items
+    saleItems.forEach(item => {
+        total += item.subtotal;
+    });
+    total += total * (gst / 100);
+
+    // Apply discount
+    discount = (total * discount) / 100;
+
+    total -= discount;
+
+    // Apply GST
+
+    // Calculate due
+    total -= due;
+
+    // Update total amount in UI
+    document.getElementById('totalAmount').innerText = total.toFixed(2);
+}
+
+// Event listener for discount input
+document.getElementById('discountInput').addEventListener('input', updateTotalPayable);
+
+// Event listener for due input
+document.getElementById('dueInput').addEventListener('input', updateTotalPayable);
+
+// Event listener for GST input
+document.getElementById('gstInput').addEventListener('input', updateTotalPayable);
+
+</script>
 </body>
 </html>
-
-
-

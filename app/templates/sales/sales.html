@@ -1,0 +1,59 @@
+{% extends "./index.html" %}
+
+{% block content %}
+<div class="container mx-auto p-4">
+    <h1 class="text-3xl font-bold mb-6 text-center">Sales Data</h1>
+
+    <form method="GET" action="/sales/" class="mb-6 flex flex-wrap justify-between">
+        <!-- Date Range Filter -->
+        <div class="mb-4 w-full md:w-auto">
+            <label for="start_date" class="block text-gray-700 text-sm font-bold mb-2">Start Date:</label>
+            <input type="date" id="start_date" name="start_date" class="shadow appearance-none border rounded w-full md:w-auto py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </div>
+
+        <div class="mb-4 w-full md:w-auto">
+            <label for="end_date" class="block text-gray-700 text-sm font-bold mb-2">End Date:</label>
+            <input type="date" id="end_date" name="end_date" class="shadow appearance-none border rounded w-full md:w-auto py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </div>
+
+        <!-- Customer Name Filter -->
+        <div class="mb-4 w-full md:w-auto">
+            <label for="customer_name" class="block text-gray-700 text-sm font-bold mb-2">Customer Name:</label>
+            <input type="text" id="customer_name" name="customer_name" placeholder="Enter customer name" class="shadow appearance-none border rounded w-full md:w-auto py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </div>
+
+        <!-- Due Amount Filter -->
+        <div class="mb-4 w-full md:w-auto">
+            <label for="due" class="block text-gray-700 text-sm font-bold mb-2">Due Amount:</label>
+            <input type="number" id="due" name="due" class="shadow appearance-none border rounded w-full md:w-auto py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </div>
+
+        <input type="submit" value="Filter" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+    </form>
+
+    <table class="min-w-full table-auto border-collapse border border-gray-300">
+        <thead>
+            <tr>
+                <th class="border p-3">ID</th>
+                <th class="border p-3">Customer Name</th>
+                <th class="border p-3">Total Amount</th>
+                <th class="border p-3">Amount Paid</th>
+                <th class="border p-3">Change Due</th>
+                <th class="border p-3">Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sale in sales %}
+            <tr>
+                <td class="border p-3">{{ sale._id }}</td>
+                <td class="border p-3">{{ sale.customer_name }}</td>
+                <td class="border p-3">{{ sale.total_amount }}</td>
+                <td class="border p-3">{{ sale.amount_paid }}</td>
+                <td class="border p-3">{{ sale.change_due }}</td>
+                <td class="border p-3">{{ sale.date }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

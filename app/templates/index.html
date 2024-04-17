@@ -1379,7 +1379,7 @@ video {
                 </a>
                 <ul class="pl-7 mt-2 hidden group-[.selected]:block">
                     <li class="mb-4">
-                        <a href="" class="text-gray-900 text-sm flex items-center hover:text-[#f84525] before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Create Product </a>
+                        <a href="/product/create_product" class="text-gray-900 text-sm flex items-center hover:text-[#f84525] before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Create Product </a>
                     </li> 
                     <li class="mb-4">
                         <a href="" class="text-gray-900 text-sm flex items-center hover:text-[#f84525] before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">All Products</a>
@@ -1449,23 +1449,39 @@ video {
     <main class="w-full md:w-[calc(100%-256px)] md:ml-64 bg-gray-200 min-h-screen transition-all main">
         <!-- navbar -->
         <div class="py-2 px-6 bg-[#f8f4f3] flex items-center shadow-md shadow-black/5 sticky top-0 left-0 z-30">
+        
             <button type="button" class="text-lg text-gray-900 font-semibold sidebar-toggle">
                 <i class="ri-menu-line"></i>
             </button>
 
             <ul class="ml-auto flex items-center">
+              <li>
+                <a  href="{{ url_for('pos_bp.pos') }}" class="text-white   mr-4 px-4 py-3 rounded-2xl bg-red-600 hover:bg-red-800">
+                    Add Sale
+                </a>
+            </li>
+            <li>
+              <a  href="{{ url_for('pos_bp.pos') }}" class="text-white   mr-4 px-4 py-3 rounded-2xl bg-blue-600 hover:bg-blue-800">
+                  Add Purchase
+              </a>
+          </li>
                 <li class="mr-1 dropdown">
-                    <button type="button" class="dropdown-toggle text-gray-400 mr-4 w-8 h-8 rounded flex items-center justify-center  hover:text-gray-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="hover:bg-gray-100 rounded-full" viewBox="0 0 24 24" style="fill: gray;transform: ;msFilter:;"><path d="M19.023 16.977a35.13 35.13 0 0 1-1.367-1.384c-.372-.378-.596-.653-.596-.653l-2.8-1.337A6.962 6.962 0 0 0 16 9c0-3.859-3.14-7-7-7S2 5.141 2 9s3.14 7 7 7c1.763 0 3.37-.66 4.603-1.739l1.337 2.8s.275.224.653.596c.387.363.896.854 1.384 1.367l1.358 1.392.604.646 2.121-2.121-.646-.604c-.379-.372-.885-.866-1.391-1.36zM9 14c-2.757 0-5-2.243-5-5s2.243-5 5-5 5 2.243 5 5-2.243 5-5 5z"></path></svg>                    
-                    </button>
+                  <button type="button" id="searchDropdownToggle" class="dropdown-toggle text-gray-400 mr-4 w-8 h-8 rounded flex items-center justify-center hover:text-gray-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="hover:bg-gray-100 rounded-full" viewBox="0 0 24 24" style="fill: gray;">
+                        <path d="M19.023 16.977a35.13 35.13 0 0 1-1.367-1.384c-.372-.378-.596-.653-.596-.653l-2.8-1.337A6.962 6.962 0 0 0 16 9c0-3.859-3.14-7-7-7S2 5.141 2 9s3.14 7 7 7c1.763 0 3.37-.66 4.603-1.739l1.337 2.8s.275.224.653.596c.387.363.896.854 1.384 1.367l1.358 1.392.604.646 2.121-2.121-.646-.604c-.379-.372-.885-.866-1.391-1.36zM9 14c-2.757 0-5-2.243-5-5s2.243-5 5-5 5 2.243 5 5-2.243 5-5 5z"></path>
+                    </svg>
+                </button>
                     <div class="dropdown-menu shadow-md shadow-black/5 z-30 hidden max-w-xs w-full bg-white rounded-md border border-gray-100">
-                        <form action="" class="p-4 border-b border-b-gray-100">
-                            <div class="relative w-full">
-                                <input type="text" class="py-2 pr-4 pl-10 bg-gray-50 w-full outline-none border border-gray-100 rounded-md text-sm focus:border-blue-500" placeholder="Search...">
-                                <i class="ri-search-line absolute top-1/2 left-4 -translate-y-1/2 text-gray-900"></i>
-                            </div>
-                        </form>
-                    </div>
+                      <form action="" class="p-4 border-b border-b-gray-100">
+                          <div class="relative w-full">
+                              <input type="text" id="searchInput" class="py-2 pr-4 pl-10 bg-gray-50 w-full outline-none border border-gray-100 rounded-md text-sm focus:border-blue-500" placeholder="Search..." onkeyup="searchRoutes()">
+                              <i class="ri-search-line absolute top-1/2 left-4 -translate-y-1/2 text-gray-900"></i>
+                          </div>
+                      </form>
+                      <ul id="searchResults" class="list-none p-2">
+                          <!-- Suggestions will be displayed here -->
+                      </ul>
+                  </div>
                 </li>
                 <li class="dropdown">
                     <button type="button" class="dropdown-toggle text-gray-400 mr-4 w-8 h-8 rounded flex items-center justify-center  hover:text-gray-600">
@@ -1630,24 +1646,25 @@ video {
         <!-- end navbar -->
 
       <!-- Content -->
+      {% block content %}
         <div class="p-6">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
                 <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5">
                     <div class="flex justify-between mb-6">
                         <div>
                             <div class="flex items-center mb-1">
-                                <div class="text-2xl font-semibold" id="user_attendance">2</div>
+                                <div class="text-2xl font-semibold" id="user_attendance">₹ {{total_sales_amount}}</div>
                             </div>
-                            <div class="text-sm font-medium text-gray-400">Users</div>
+                            <div class="text-sm font-medium text-gray-400">Today Sales</div>
                         </div>
                          <div class="dropdown">
                             <button type="button" class="dropdown-toggle text-gray-400 hover:text-gray-600"><i class="ri-more-fill"></i></button>
                             <ul class="dropdown-menu shadow-md shadow-black/5 z-30 hidden py-1.5 rounded-md bg-white border border-gray-100 w-full max-w-[140px]">
                                 <li>
-                                    <a href="#" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Profile</a>
+                                    <a href="#" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Profit</a>
                                 </li>
                                 <li>
-                                    <a href="#" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Settings</a>
+                                    <a href="#" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Due</a>
                                 </li>
                                 <li>
                                     <a href="#" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Logout</a>
@@ -1656,16 +1673,16 @@ video {
                         </div> 
                     </div>
 
-                    <a href="/gebruikers" class="text-[#f84525] font-medium text-sm hover:text-red-800">View</a>
+                    <a href="{{ url_for('sales.get_sales') }}" class="text-[#f84525] font-medium text-sm hover:text-red-800">View</a>
                 </div>
                 <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5">
                     <div class="flex justify-between mb-4">
                         <div>
                             <div class="flex items-center mb-1">
-                                <div class="text-2xl font-semibold">100</div>
+                                <div class="text-2xl font-semibold">{{number_of_sales}}</div>
                                 <div class="p-1 rounded bg-emerald-500/10 text-emerald-500 text-[12px] font-semibold leading-none ml-2">+30%</div>
                             </div>
-                            <div class="text-sm font-medium text-gray-400">Companies</div>
+                            <div class="text-sm font-medium text-gray-400">Today Customer</div>
                         </div>
                          <div class="dropdown">
                             <button type="button" class="dropdown-toggle text-gray-400 hover:text-gray-600"><i class="ri-more-fill"></i></button>
@@ -2092,12 +2109,58 @@ video {
             </div>
         </div>
       <!-- End Content -->
+      {% endblock %}
     </main>
 
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
+function searchRoutes() {
+    let searchTerm = $('#searchInput').val().toLowerCase();
+
+    $.ajax({
+        url: '/search_routes',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ searchTerm: searchTerm }),
+        success: function(response) {
+            displaySearchResults(response);
+        },
+        error: function(error) {
+            console.error('Error searching routes:', error);
+        }
+    });
+}
+function displaySearchResults(results) {
+    let resultList = $('#searchResults');
+    resultList.empty();
+
+    if (results.length === 0) {
+        resultList.append('<li>No results found</li>');
+        return;
+    }
+
+    // Display only top 3 results
+    results.slice(0, 3).forEach(function(route) {
+        resultList.append(`
+            <li>
+                <button class="selectRouteBtn" data-route-url="${route.url}">
+                    ${route.name}
+                </button>
+            </li>
+        `);
+    });
+
+    // Add event listener to select route buttons
+    $('.selectRouteBtn').click(function() {
+        let routeUrl = $(this).data('route-url');
+        window.location.href = routeUrl;
+    });
+}
+
+
+
         // start: Sidebar
         const sidebarToggle = document.querySelector('.sidebar-toggle')
         const sidebarOverlay = document.querySelector('.sidebar-overlay')
@@ -2347,7 +2410,20 @@ video {
     
     </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+    <script>
+      // Add event listener to capture keypress events
+      document.addEventListener('keydown', function(event) {
+          // Check if Ctrl + P is pressed
+          if (event.ctrlKey && event.key === 'p') {
+              // Redirect to "/product/create" route
+              window.location.href = "{{ url_for('product_bp.create_product') }}";
+          }
+          if (event.ctrlKey && event.key === 'b') {
+              // Redirect to "/product/create" route
+              window.location.href = "{{ url_for('pos_bp.pos') }}";
+          }
+      });
+  </script>
 
 </body>
 </html>
