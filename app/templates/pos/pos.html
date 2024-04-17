@@ -305,11 +305,11 @@ function renderSaleItems() {
 
         // Product Name and Edit Button
         const productNameCell = document.createElement('td');
-        productNameCell.classList.add('p-4', 'w-1/4');
+        productNameCell.classList.add('p-2', 'w-1/4');
         productNameCell.innerHTML = `
             <div class="flex flex-col gap-1"> 
                 <div>${product.name}</div>
-                <div class="bg-green-600 text-white w-max px-2 py-0.5 text-xs rounded-lg">edit</div>
+                <div class="bg-green-600 text-white w-max px-2 py-0.5 text-xs rounded-lg">${product.barcode}</div>
             </div>
         `;
         row.appendChild(productNameCell);
@@ -317,7 +317,9 @@ function renderSaleItems() {
         // Product Price
         const productPriceCell = document.createElement('td');
         productPriceCell.classList.add('p-4', 'w-1/4');
-        productPriceCell.textContent = product.selling_price;
+        productPriceCell.innerHTML = `
+    <input type="number" class="productPriceInput w-20 bg-gray-200 border-purple-500 border-b-2 p-1 rounded-sm" value="${product.selling_price}">
+`;
         row.appendChild(productPriceCell);
 
         // Quantity and Buttons
@@ -374,6 +376,30 @@ row.appendChild(deleteBtnCell);
             document.getElementById('totalAmount').innerText = parseFloat(totalAmount);
         });
 
+
+// Add event listener to price input field
+const productPriceInput = row.querySelector('.productPriceInput');
+productPriceInput.addEventListener('input', () => {
+    const newPrice = parseFloat(productPriceInput.value);
+    if (!isNaN(newPrice)) {
+        const quantity = product.quantity;
+        const newSubtotal = newPrice * quantity;
+
+        // Update product object and UI
+        product.selling_price = newPrice;
+        product.subtotal = newSubtotal;
+        subtotalCell.textContent = newSubtotal;
+
+        // Recalculate totalAmount
+        totalAmount = 0;
+        saleItems.forEach(item => {
+            totalAmount += parseFloat(item.subtotal);
+        });
+        document.getElementById('totalAmount').innerText = totalAmount;
+    }
+});
+
+
         
 const deleteBtn = row.querySelector('.deleteBtn');
 
@@ -385,6 +411,7 @@ deleteBtn.addEventListener('click', () => {
 
 
 </script>
+
 
 <script>
     function removeProductFromSale(index) {
