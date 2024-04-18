@@ -61,15 +61,18 @@
 <div class="grid grid-cols-3 mt-5 text-sm font-semibold ">
     <div class="flex flex-col w-32 gap-2">
         <label for="">GST (%)</label>
-        <input id="gstInput" type="text" class="bg-gray-200 border-black border-2 p-1 rounded-lg">
+        <input id="gstInput" type="text" class="bg-gray-100 border-green-500 border-2 p-1  rounded-lg">
     </div>
     <div class="flex flex-col w-32 gap-2">
         <label for="">Discount (₹)</label>
-        <input id="discountInput" type="text" class="bg-gray-200 border-black border-2 p-1 rounded-lg">
+        <div class="flex ">
+            <input id="discountInput" type="text" class= "w-32 bg-gray-100 border-green-500 border-2 p-1  rounded-lg rounded-r-none">
+            <button id="discountTypeBtn" class="bg-gray-100 px-2 border-gray-500 border-2 p-1 rounded-lg rounded-l-none ">%</button>
+        </div>
     </div>
     <div class="flex flex-col w-32 gap-2">
         <label for="">DUE (₹)</label>
-        <input  id="dueInput" type="text" class="bg-gray-200 border-black border-2 p-1 rounded-lg">
+        <input  id="dueInput" type="text" class="bg-gray-100 border-green-500 border-2 p-1  rounded-lg">
     </div>
 </div>
 
@@ -364,6 +367,7 @@ row.appendChild(deleteBtnCell);
                 subtotalCell.textContent = product.subtotal;
                 totalAmount = parseFloat(totalAmount) - parseFloat(product.selling_price); // Increment total amount
                 document.getElementById('totalAmount').innerText = totalAmount;
+                updateTotalPayable()
             }
         });
 
@@ -374,6 +378,7 @@ row.appendChild(deleteBtnCell);
             subtotalCell.textContent = product.subtotal;
             totalAmount = parseFloat(totalAmount) + parseFloat(product.selling_price); // Increment total amount
             document.getElementById('totalAmount').innerText = parseFloat(totalAmount);
+            updateTotalPayable()
         });
 
 
@@ -391,6 +396,8 @@ productPriceInput.addEventListener('input', () => {
         subtotalCell.textContent = newSubtotal;
 
         // Recalculate totalAmount
+        updateTotalPayable()
+
         totalAmount = 0;
         saleItems.forEach(item => {
             totalAmount += parseFloat(item.subtotal);
@@ -548,6 +555,26 @@ function playBeep() {
 
 
 <script>
+    // Function to toggle discount type between percentage and fixed
+let discountType = 'percentage';  // Default discount type is percentage
+
+// Toggle discount type
+document.getElementById('discountTypeBtn').addEventListener('click', function() {
+    if (discountType === 'percentage') {
+        discountType = 'fixed';
+        this.textContent = '$'; // Change button text to '$' for fixed discount
+    } else {
+        discountType = 'percentage';
+        this.textContent = '%'; // Change button text to '%' for percentage discount
+    }
+
+    updateTotalPayable(); // Recalculate total when discount type changes
+});
+
+// Event listener for toggle discount type button
+
+</script>
+<script>
     // Function to calculate and update total payable
 // Function to calculate and update total payable
 function updateTotalPayable() {
@@ -563,9 +590,13 @@ function updateTotalPayable() {
     total += parseFloat(total * (gst / 100));
 
     // Apply discount
-    discount = parseFloat((total * discount) / 100);
+    if (discountType === 'percentage') {
+        let discount2 = parseFloat((total * discount) / 100);
+        total -= discount2;
+    } else if (discountType === 'fixed') {
+        total -= discount;
+    }
 
-    total -= discount;
 
     // Apply GST
 
@@ -586,5 +617,7 @@ document.getElementById('dueInput').addEventListener('input', updateTotalPayable
 document.getElementById('gstInput').addEventListener('input', updateTotalPayable);
 
 </script>
+
+
 </body>
 </html>
