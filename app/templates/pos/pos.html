@@ -1,623 +1,882 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Point of Sale</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+   
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
+
 <body class="bg-white">
-    <div class="justify-center mx-auto">
+
+     <div class="justify-center mx-auto ">
         <nav>
 
         </nav>
 
 
-               <main class="" id="main">
+        <main class="" id="main">
 
             <div class="grid grid-cols-2 ">
 
-                <first_Grid><div>
-                    <div class="flex flex-col p-5 pl-2">
-                        <div class="p-2 flex flex-row"> 
-                            <select   onclick="fetchCustomers()"  class="block w-full p-2 text-gray-900  font-sans font-semibold uppercase    border-2 border-gray-400 bg-white text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" name="" id="showcustmoer">
-                                <option value="Walk-IN-Customer">Walk-IN-Customer</option>
-                            </select>
-                            <button onclick="AddCustomers() " class="bg-purple-500 text-white font-bold rounded-lg rounded-l-none px-5 py-1 text-xl">+</button>
-                            <!-- <img onclick="AddCustomers() " class="w-8 h-8 cursor-pointer" c src="https://cdn4.iconfinder.com/data/icons/media-buttons/512/add-512.png" alt=""> -->
-                        </div>
+                <first_Grid>
+                    <div>
+                        <div class="flex flex-col p-5 pl-2">
+                            <div class="p-2 flex flex-row">
+                                <select onclick="fetchCustomers()" 
+                                    class="block w-full p-2 text-gray-900  font-sans font-semibold uppercase    border-2 border-gray-400 bg-white text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    name="" id="showcustmoer" >
+                                    <option value="Walk-IN-Customer">Walk-IN-Customer</option>
+                                </select>
+                                <button onclick="AddCustomers() "
+                                    class="bg-purple-500 text-white font-bold rounded-lg rounded-l-none px-5 py-1 text-xl">+</button>
+                                <!-- <img onclick="AddCustomers() " class="w-8 h-8 cursor-pointer" c src="https://cdn4.iconfinder.com/data/icons/media-buttons/512/add-512.png" alt=""> -->
+                            </div>
 
-                       
-                        
 
-                        <div class="p-2">
-                            <!-- component -->
-<div class="container">
 
-<table class="sale-items text-left text-sm w-full">
-    <thead class=" bg-grey-light flex text-black font-bold w-full">
-        <tr class="flex w-full ">
-            <td class="p-4 w-1/4">Product</td>
-            <td class="p-4 w-1/4">Price</td>
-            <td class="p-4 w-1/4">Quantity</td>
-            <td class="p-4 w-1/4">Subtotal</td>
-            <td class="p-4 w-1/4"></td>
 
-        </tr>
-    </thead>
-<!-- Remove the nasty inline CSS fixed height on production and replace it with a CSS class — this is just for demonstration purposes! -->
-    <tbody class=" flex flex-col items-center  overflow-y-scroll w-full" style="height: 45vh;">
-        
-        
-    </tbody>
-</table>
+                            <div class="p-2">
+                                <!-- component -->
+                                <div class="container">
 
-<div class="bg-blue-200 px-5 py-2 text-center">
-   <label class="font-bold " for="">Total Payable  :- ₹ </label> <span id="totalAmount" class="  text-blue-800 text-lg   font-semibold me-2  rounded dark:bg-blue-900 dark:text-blue-300">0</span>
+                                    <table class="sale-items text-left text-sm w-full">
+                                        <thead class=" bg-grey-light flex text-black font-bold w-full">
+                                            <tr class="flex w-full ">
+                                                <td class="p-4 w-1/4">Product</td>
+                                                <td class="p-4 w-1/4">Price</td>
+                                                <td class="p-4 w-1/4">Quantity</td>
+                                                <td class="p-4 w-1/4">Subtotal</td>
+                                                <td class="p-4 w-1/4"></td>
 
-</div>  
+                                            </tr>
+                                        </thead>
+                                        <!-- Remove the nasty inline CSS fixed height on production and replace it with a CSS class — this is just for demonstration purposes! -->
+                                        <tbody class=" flex flex-col items-center  overflow-y-scroll w-full"
+                                            style="height: 45vh;">
 
-<div class="grid grid-cols-3 mt-5 text-sm font-semibold ">
-    <div class="flex flex-col w-32 gap-2">
-        <label for="">GST (%)</label>
-        <input id="gstInput" type="text" class="bg-gray-100 border-green-500 border-2 p-1  rounded-lg">
-    </div>
-    <div class="flex flex-col w-32 gap-2">
-        <label for="">Discount (₹)</label>
-        <div class="flex ">
-            <input id="discountInput" type="text" class= "w-32 bg-gray-100 border-green-500 border-2 p-1  rounded-lg rounded-r-none">
-            <button id="discountTypeBtn" class="bg-gray-100 px-2 border-gray-500 border-2 p-1 rounded-lg rounded-l-none ">%</button>
-        </div>
-    </div>
-    <div class="flex flex-col w-32 gap-2">
-        <label for="">DUE (₹)</label>
-        <input  id="dueInput" type="text" class="bg-gray-100 border-green-500 border-2 p-1  rounded-lg">
-    </div>
-</div>
 
-<div class="mt-5 flex gap-5">
-    <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">PayNow</button>
-    <button type="button" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Draft</button>
+                                        </tbody>
+                                    </table>
 
-</div>
-</div>
+                                    <div class="bg-blue-200 px-5 py-2 text-center">
+                                        <label class="font-bold " for="">Total Payable :- ₹ </label> <span
+                                            id="totalAmount"
+                                            class="  text-blue-800 text-lg   font-semibold me-2  rounded dark:bg-blue-900 dark:text-blue-300">0</span>
+
+                                    </div>
+
+                                    <div class="grid grid-cols-3 gap-52  mt-5 text-sm font-semibold ">
+                                        <div class="flex  w-32 gap-5">
+                                            <label for="">GST (%)</label>
+                                            <input id="gstInput" type="text"
+                                                class="bg-gray-100 border-2 border-green-500  p-1  rounded-lg">
+                                        </div>
+                                        <div class="flex  w-32 gap-5">
+                                            <label for="">Discount (₹)</label>
+                                            <div class="flex ">
+                                                <input id="discountInput" type="text"
+                                                    class="w-32 bg-gray-100 border-green-500 border-2 p-1  rounded-lg rounded-r-none">
+                                                <button id="discountTypeBtn"
+                                                    class="bg-gray-100 px-2 border-gray-500 border-2 p-1 rounded-lg rounded-l-none ">%</button>
+                                            </div>
+                                        </div>
+                                      
+                                        
+                                    </div>
+
+                                    <div class="mt-8 flex gap-10">
+                                        <button type="button" onclick="paynow()"
+                                            class="text-white bg-purple-700 hover:bg-purple-800   focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-purple-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">PayNow</button>
+                                        <button type="button"
+                                            class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Draft</button>
+
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div></first_Grid>
+                </first_Grid>
 
                 <second_Crid class="bg-white">
-                     
+ 
 
-        <add_customer id="addcustomerform" class="hidden">
-                
-            <!-- component -->
-            <section class="max-w-4xl p-6 mx-auto bg-gray-700 rounded-md shadow-md dark:bg-gray-800 mt-20">
-                <h1 class="text-lg font-bold text-white capitalize dark:text-white">Add Customer</h1>
-                    <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2 text-xs">
-                        <div>
-                            <label class="text-white dark:text-gray-200" for="username">Username</label>
-                            <input id="username" type="text" class="block w-full px-2 py-1 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
-                        </div>
-            
-                        <div>
-                            <label class="text-white dark:text-gray-200" for="emailAddress">Email Address</label>
-                            <input id="emailAddress" type="email" class="block w-full px-2 py-1 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
-                        </div>
-                        <div>
-                            <label class="text-white dark:text-gray-200" for="emailAddress">Mobile Number</label>
-                            <input id="mobile" type="number" class="block w-full px-2 py-1 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
-                        </div>
-            
-                      
-                       
-                       
-                        <div>
-                            <label class="text-white dark:text-gray-200" for="passwordConfirmation">DOB</label>
-                            <input id="date" type="date" class="block w-full px-2 py-1 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
-                        </div>
-                        <div>
-                            <label class="text-white dark:text-gray-200" for="passwordConfirmation">Text Area</label>
-                            <textarea id="textarea" type="textarea" class="block w-full px-2  mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"></textarea>
-                        </div>
-                    </div>
+                    <add_customer id="addcustomerform" class="hidden">
 
-                   <div class="flex  gap-5">
-                    <div class="flex justify-end mt-6">
-                        <button onclick="reverseaddcustomer()" class="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:bg-gray-600">Cancel</button>
-                    </div>
-            
-                    <div class="flex justify-end mt-6">
-                        <button onclick="saveCustomer()" class="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:bg-gray-600">Save</button>
-                    </div>
-                   </div>
-            </section>
-            
-              
-                                </add_customer>
+                        <!-- component -->
+                        <section class="max-w-4xl p-6 mx-auto bg-gray-700 rounded-md shadow-md dark:bg-gray-800 mt-20">
+                            <h1 class="text-lg font-bold text-white capitalize dark:text-white">Add Customer</h1>
+                            <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2 text-xs">
+                                <div>
+                                    <label class="text-white dark:text-gray-200" for="username">Username</label>
+                                    <input id="username" type="text"
+                                        class="block w-full px-2 py-1 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
+                                </div>
+
+                                <div>
+                                    <label class="text-white dark:text-gray-200" for="emailAddress">Email
+                                        Address</label>
+                                    <input id="emailAddress" type="email"
+                                        class="block w-full px-2 py-1 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
+                                </div>
+                                <div>
+                                    <label class="text-white dark:text-gray-200" for="emailAddress">Mobile
+                                        Number</label>
+                                    <input id="mobile" type="number"
+                                        class="block w-full px-2 py-1 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
+                                </div>
+
+
+
+
+                                <div>
+                                    <label class="text-white dark:text-gray-200" for="passwordConfirmation">DOB</label>
+                                    <input id="date" type="date"
+                                        class="block w-full px-2 py-1 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
+                                </div>
+                                <div>
+                                    <label class="text-white dark:text-gray-200" for="passwordConfirmation">Text
+                                        Area</label>
+                                    <textarea id="textarea" type="textarea"
+                                        class="block w-full px-2  mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="flex  gap-5">
+                                <div class="flex justify-end mt-6">
+                                    <button onclick="reverseaddcustomer()"
+                                        class="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:bg-gray-600">Cancel</button>
+                                </div>
+
+                                <div class="flex justify-end mt-6">
+                                    <button onclick="saveCustomer()"
+                                        class="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:bg-gray-600">Save</button>
+                                </div>
+                            </div>
+                        </section>
+
+
+                    </add_customer>
 
                     <div>
                         <!-- component -->
-<content id="second_content">
-    
-    <div class="p-2 mt-5 w-full"> 
-                            
-        <div class='w-full px-2 '>
-            <div class="relative flex items-center w-full h-12 rounded-lg focus-within:shadow-lg bg-gray-100 overflow-hidden">
-                <div class="grid place-items-center h-full w-12 text-gray-800">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
+                        <content id="second_content">
+
+                            <div class="p-2 mt-5 w-full">
+
+                                <div class='w-full px-2 '>
+                                    <div
+                                        class="relative flex items-center w-full h-12 rounded-lg focus-within:shadow-lg bg-gray-100 overflow-hidden">
+                                        <div class="grid place-items-center h-full w-12 text-gray-800">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                            </svg>
+                                        </div>
+
+                                        <input
+                                            class="peer h-full w-full outline-none text-sm bg-gray-100 text-black pr-2"
+                                            type="text" id="search_product" placeholder="Search something.." />
+                                    </div>
+                                    <div id="productSuggestions"></div>
+
+                                </div>
+                            </div>
+                    </div>
+                    </content>
+
+
+                                       
+<div id="Payment_gateway"  class="hidden">
+    <div class=" m-5 mt-2  border-2 border-gray-300 p-5  pt-0">
+        <div class=" bg-stone-100 border-b-2 border-gray-200"><h1 class="p-2">Create Payment</h1></div>
+
+        <div class="text-center mt-2  text-2xl">
+            <h1 id="cname">Walk In Customer</h1>
+        </div>
+
+        <div class="mt-14">
+            <div class="grid grid-cols-2 ">
+                <div id="firstc" class="f">
+                    <div class="flex flex-col gap-5 mr-20">
+                        <div class="flex flex-col text-sm gap-2">
+                            <label for="">Total  amount :</label>
+                            <input id="tas" class="border-b-2 font-semibold border-green-300 hover:border-green-400" type="text" value="">
+                        </div>
+                        <div class="flex flex-col text-sm gap-2">
+                            <label for="">Paying amount :</label>
+                            <input id="pas" onchange="pas1()" class="border-b-2 font-semibold border-green-300" type="text" value="">
+                        </div>
+                        <div class="flex flex-col text-sm gap-2">
+                            <label for="">Due amount :</label>
+                            <label id="das"  class=" font-semibold " type="text" value="">0</label>
+                        </div>
+                    </div>
+
+                   
+
+                   
                 </div>
-        
-                <input
-                class="peer h-full w-full outline-none text-sm bg-gray-100 text-black pr-2"
-                type="text"
-                id="search_product"
-                placeholder="Search something.." /> 
+
+
+               
+                <div id="secondc">
+                    <div>
+                        <div class="flex flex-col   bg-stone-50 text-sm  border-2 border-gray-200">
+                            <div class="flex  justify-between border-b-2 p-2 border-gray-200">
+                                <label for="">Total Product</label>
+                                <label id="tps" for="">2</label>
+                            </div>
+                            <div class="flex justify-between border-b-2 p-2 border-gray-200">
+                                <label  for="">GST</label>
+                                <label id="tgs" for="">2</label>
+                            </div>
+                            <div class="flex justify-between  border-b-2 p-2 border-gray-200">
+                                <label  for="">DISCOUNT</label>
+                                <label id="tds" for="">2</label>
+                            </div>
+                            <div class="flex justify-between  border-b-2 p-2 border-gray-200">
+                                <label  for="">Total</label>
+                                <label id="tas5" for="">-</label>
+                            </div>
+                        </div>
+
+                       
+
+
+                    </div>
+                </div>
             </div>
-            <div id="productSuggestions"></div>
-        
+            <div class="flex flex-col ">
+                <div class="flex w-full">
+                    <div class="mr-20 mt-14">
+                        <div class="flex flex-col  gap-1">
+                            <label for="" class="text-sm font-semibold">Order Status</label>
+                            <select id="paymentc" class="text-sm border-2  rounded-none p-1 border-gray-200" name="cars" id="cars">
+                                <option class="received" value="Cash">Received</option>
+                                <option class="pending" value="Online">Pending</option>
+                            
+                              </select>
+                        </div>
+                    </div>
+                    <div class="mr-20 mt-14">
+                        <div class="flex flex-col  gap-1 font-semibold">
+                            <label for="" class="text-sm">Payment Choice</label>
+                            <select id="paymentc" class="text-sm border-2 rounded-none p-1 border-gray-200" name="cars" id="cars">
+                                <option class="rounded-none" value="Cash">Cash</option>
+                                <option class="rounded-none" value="Online">Online</option>
+                            
+                              </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-10 flex gap-10">
+                           
+                    <button onclick="submitForm()"  class="text-white bg-purple-600 p-2 px-4  rounded-lg">Submit</button>
+                    <button onclick="cancelForm()"  class="text-white bg-red-700 p-2  px-4 rounded-lg">Cancel</button>
+    
+                </div>
+            </div>
+
         </div>
     </div>
+  
 </div>
-</content>
                 </second_Crid>
 
-            
+
             </div>
         </main>
     </div>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-document.getElementById('incrementBtn').addEventListener('click', function() {
-    let quantityLabel = document.getElementById('quantityLabel');
-    let currentQuantity = parseInt(quantityLabel.innerText);
-    quantityLabel.innerText = currentQuantity + 1;
-    calculateSubtotal(this.closest('tr')); // Recalculate subtotal
-});
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('incrementBtn').addEventListener('click', function () {
+                let quantityLabel = document.getElementById('quantityLabel');
+                let currentQuantity = parseInt(quantityLabel.innerText);
+                quantityLabel.innerText = currentQuantity + 1;
+                calculateSubtotal(this.closest('tr')); // Recalculate subtotal
+            });
 
-document.getElementById('decrementBtn').addEventListener('click', function() {
-    let quantityLabel = document.getElementById('quantityLabel');
-    let currentQuantity = parseInt(quantityLabel.innerText);
-    if (currentQuantity > 1) {
-        quantityLabel.innerText = currentQuantity - 1;
-        calculateSubtotal(this.closest('tr')); // Recalculate subtotal
-    }
-});
-});
+            document.getElementById('decrementBtn').addEventListener('click', function () {
+                let quantityLabel = document.getElementById('quantityLabel');
+                let currentQuantity = parseInt(quantityLabel.innerText);
+                if (currentQuantity > 1) {
+                    quantityLabel.innerText = currentQuantity - 1;
+                    calculateSubtotal(this.closest('tr')); // Recalculate subtotal
+                }
+            });
+        });
 
-function calculateSubtotal(row) {
-let price = parseFloat(row.querySelector('td:nth-child(2)').innerText.trim());
-let quantity = parseInt(row.querySelector('#quantityLabel').innerText.trim());
-let subtotal = price * quantity;
-row.querySelector('td:nth-child(4)').innerText = subtotal;
-}
-
-
-</script>
-
-<script>
-let i=1
-function fetchCustomers() {
-fetch('/pos/search_customer')
-.then(response => response.json())
-.then(data => {
-    let customerInput = document.getElementById('showcustmoer'); 
-
-    if (i==1)
-    {
-        data.forEach(customer => {
-        let option = document.createElement('option');
-        option.value = customer.id; // Assuming customer has an ID
-        option.innerText = customer.name; 
-        option.className="text-sm px-2 mt-2  "// Assuming customer has a name
-        customerInput.appendChild(option);
-    });
-    i=0
-    }
+        function calculateSubtotal(row) {
+            let price = parseFloat(row.querySelector('td:nth-child(2)').innerText.trim());
+            let quantity = parseInt(row.querySelector('#quantityLabel').innerText.trim());
+            let subtotal = price * quantity;
+            row.querySelector('td:nth-child(4)').innerText = subtotal;
+        }
 
 
+    </script>
 
-    
-    // Assuming the data is an array of customer names
-    
-    
-});
-}function AddCustomers() {
-    i=1
-    document.getElementById('showcustmoer').innerHTML=""
-    let customerInput=document.getElementById('showcustmoer')
-    let option = document.createElement('option');
-    option.innerText = "Walk-In-Customer"; 
-    option.className="text-sm px-2 mt-2  "// Assuming customer has a name
-    customerInput.appendChild(option);
+    <script>
+        let i = 1
+        function fetchCustomers() {
+            fetch('/pos/search_customer')
+                .then(response => response.json())
+                .then(data => {
+                    let customerInput = document.getElementById('showcustmoer');
+                    let cname = document.getElementById('cname');
 
-    // Show the customer form and hide the main view
-    document.getElementById("addcustomerform").className = "block m-10";
-    document.getElementById("second_content").className = "hidden";
-
-}
-
-function reverseaddcustomer() {
-    // Hide the customer form and show the main view
-    document.getElementById("second_content").className = "block";
-    document.getElementById("addcustomerform").className = "hidden";
-    
-}
-
-</script>
+                    if (i == 1) {
+                        data.forEach(customer => {
+                            let option = document.createElement('option');
+                            option.value = customer.id; // Assuming customer has an ID
+                            option.innerText = customer.name;
+                            option.className = "text-sm px-2 mt-2  "// Assuming customer has a name
+                            customerInput.appendChild(option);
+                        });
+                        i = 0
+                    }
 
 
-<script>
-let saleItems = []; // Global array to store sale items
-let totalAmount = 0;  // Initialize total amount
-
-function addProductToSale(product) {
-    // Check if the product already exists in saleItems
-    const existingProduct = saleItems.find(item => item.barcode === product.barcode);
-
-    if (existingProduct) {
-        existingProduct.quantity += 1; // Increment quantity
-        existingProduct.subtotal = existingProduct.quantity * existingProduct.selling_price; 
-        totalAmount = parseFloat(totalAmount) + parseFloat(existingProduct.selling_price); // Increment total amount
-        document.getElementById('totalAmount').innerText = parseFloat(totalAmount);
-
-// Update subtotal
-    } else {
-        // Add product to saleItems array with quantity of 1
-        product.quantity = 1;
-        product.subtotal = product.selling_price;
-        totalAmount = parseFloat(totalAmount) + parseFloat(product.selling_price); // Increment total amount
-        document.getElementById('totalAmount').innerText = parseFloat(totalAmount);
-
-
-        saleItems.push(product);
-    }
+                    customerInput.addEventListener('change', function() {
+                let selectedCustomerName = customerInput.options[customerInput.selectedIndex].text;
+                cname.innerText = selectedCustomerName;
+            });
 
 
 
+                    // Assuming the data is an array of customer names
 
-    // Update sale items in the UI
-    renderSaleItems();
 
-}
-// function updateTotalAmount() {
-//     let total = 0;
+                });
+        } function AddCustomers() {
+            i = 1
+            document.getElementById('showcustmoer').innerHTML = ""
+            let customerInput = document.getElementById('showcustmoer')
+            let option = document.createElement('option');
+            option.innerText = "Walk-In-Customer";
+            option.className = "text-sm px-2 mt-2  "// Assuming customer has a name
+            customerInput.appendChild(option);
 
-//     saleItems.forEach(item => {
-//         total += item.subtotal;
-//     });
+            // Show the customer form and hide the main view
+            document.getElementById("addcustomerform").className = "block m-10";
+            document.getElementById("second_content").className = "hidden";
 
-//     // Update total amount in UI
-//     document.getElementById('totalAmount').innerText = total.toFixed(2);
-// }
+        }
 
-</script>
+        function reverseaddcustomer() {
+            // Hide the customer form and show the main view
+            document.getElementById("second_content").className = "block";
+            document.getElementById("addcustomerform").className = "hidden";
 
-<script>
-function renderSaleItems() {
-    const tbody = document.querySelector('.sale-items tbody');
-    if (!tbody) return; // Exit if tbody is null
+        }
 
-    tbody.innerHTML = ''; // Clear previous sale items
+    </script>
 
-    saleItems.forEach((product, index) => {
-        const row = document.createElement('tr');
-        row.classList.add('flex', 'w-full', 'mb-4', 'bg-gray-200', 'font-normal');
 
-        // Product Name and Edit Button
-        const productNameCell = document.createElement('td');
-        productNameCell.classList.add('p-2', 'w-1/4');
-        productNameCell.innerHTML = `
+    <script>
+        let saleItems = []; // Global array to store sale items
+        let totalAmount = 0;  // Initialize total amount
+
+        function addProductToSale(product) {
+            // Check if the product already exists in saleItems
+            const existingProduct = saleItems.find(item => item.barcode === product.barcode);
+
+            if (existingProduct) {
+                existingProduct.quantity += 1; // Increment quantity
+                existingProduct.subtotal = existingProduct.quantity * existingProduct.selling_price;
+                totalAmount = parseFloat(totalAmount) + parseFloat(existingProduct.selling_price); // Increment total amount
+                document.getElementById('totalAmount').innerText = parseFloat(totalAmount);
+
+                // Update subtotal
+            } else {
+                // Add product to saleItems array with quantity of 1
+                product.quantity = 1;
+                product.subtotal = product.selling_price;
+                totalAmount = parseFloat(totalAmount) + parseFloat(product.selling_price); // Increment total amount
+                document.getElementById('totalAmount').innerText = parseFloat(totalAmount);
+
+
+                saleItems.push(product);
+            }
+
+
+
+
+            // Update sale items in the UI
+            renderSaleItems();
+
+        }
+        // function updateTotalAmount() {
+        //     let total = 0;
+
+        //     saleItems.forEach(item => {
+        //         total += item.subtotal;
+        //     });
+
+        //     // Update total amount in UI
+        //     document.getElementById('totalAmount').innerText = total.toFixed(2);
+        // }
+
+    </script>
+
+    <script>
+        function renderSaleItems() {
+            const tbody = document.querySelector('.sale-items tbody');
+            if (!tbody) return; // Exit if tbody is null
+
+            tbody.innerHTML = ''; // Clear previous sale items
+
+            saleItems.forEach((product, index) => {
+                const row = document.createElement('tr');
+                row.classList.add('flex', 'w-full', 'mb-4', 'bg-gray-200', 'font-normal');
+
+                // Product Name and Edit Button
+                const productNameCell = document.createElement('td');
+                productNameCell.classList.add('p-2', 'w-1/4');
+                productNameCell.innerHTML = `
             <div class="flex flex-col gap-1"> 
                 <div>${product.name}</div>
                 <div class="bg-green-600 text-white w-max px-2 py-0.5 text-xs rounded-lg">${product.barcode}</div>
             </div>
         `;
-        row.appendChild(productNameCell);
+                row.appendChild(productNameCell);
 
-        // Product Price
-        const productPriceCell = document.createElement('td');
-        productPriceCell.classList.add('p-4', 'w-1/4');
-        productPriceCell.innerHTML = `
+                // Product Price
+                const productPriceCell = document.createElement('td');
+                productPriceCell.classList.add('p-4', 'w-1/4');
+                productPriceCell.innerHTML = `
     <input type="number" class="productPriceInput w-20 bg-gray-200 border-purple-500 border-b-2 p-1 rounded-sm" value="${product.selling_price}">
 `;
-        row.appendChild(productPriceCell);
+                row.appendChild(productPriceCell);
 
-        // Quantity and Buttons
-        const productQuantityCell = document.createElement('td');
-        productQuantityCell.classList.add('p-4', 'w-1/4');
-        productQuantityCell.innerHTML = `
+                // Quantity and Buttons
+                const productQuantityCell = document.createElement('td');
+                productQuantityCell.classList.add('p-4', 'w-1/4');
+                productQuantityCell.innerHTML = `
             <div class="flex">
                 <button class="decrementBtn bg-purple-600 px-2 py-1 text-white font-bold rounded-md rounded-r-none">-</button>
                 <label class="quantityLabel px-4">${product.quantity}</label>
                 <button class="incrementBtn bg-purple-600 px-2 py-1 text-white font-bold rounded-md rounded-l-none">+</button>
             </div>
         `;
-        row.appendChild(productQuantityCell);
+                row.appendChild(productQuantityCell);
 
 
 
-        // Subtotal
-        const subtotalCell = document.createElement('td');
-        subtotalCell.classList.add('p-4', 'w-1/4');
-        subtotalCell.textContent = product.subtotal;
-        row.appendChild(subtotalCell);
+                // Subtotal
+                const subtotalCell = document.createElement('td');
+                subtotalCell.classList.add('p-4', 'w-1/4');
+                subtotalCell.textContent = product.subtotal;
+                row.appendChild(subtotalCell);
 
-        tbody.appendChild(row);
+                tbody.appendChild(row);
 
-        const deleteBtnCell = document.createElement('td');
-deleteBtnCell.classList.add('p-4', 'w-1/4');
-deleteBtnCell.innerHTML = `
+                const deleteBtnCell = document.createElement('td');
+                deleteBtnCell.classList.add('p-4', 'w-1/4');
+                deleteBtnCell.innerHTML = `
     <button class="deleteBtn bg-red-600 px-2 py-1 text-white font-bold rounded-md">Delete</button>
 `;
-row.appendChild(deleteBtnCell);
+                row.appendChild(deleteBtnCell);
 
-        // Add event listeners to increment and decrement buttons
-        const decrementBtn = row.querySelector('.decrementBtn');
-        const incrementBtn = row.querySelector('.incrementBtn');
-        const quantityLabel = row.querySelector('.quantityLabel');
+                // Add event listeners to increment and decrement buttons
+                const decrementBtn = row.querySelector('.decrementBtn');
+                const incrementBtn = row.querySelector('.incrementBtn');
+                const quantityLabel = row.querySelector('.quantityLabel');
 
-        decrementBtn.addEventListener('click', () => {
-            if (product.quantity > 1) {
-                product.quantity--;
-                quantityLabel.textContent = product.quantity;
-                product.subtotal = product.quantity * product.selling_price;
-                subtotalCell.textContent = product.subtotal;
-                totalAmount = parseFloat(totalAmount) - parseFloat(product.selling_price); // Increment total amount
-                document.getElementById('totalAmount').innerText = totalAmount;
-                updateTotalPayable()
+                decrementBtn.addEventListener('click', () => {
+                    if (product.quantity > 1) {
+                        product.quantity--;
+                        quantityLabel.textContent = product.quantity;
+                        product.subtotal = product.quantity * product.selling_price;
+                        subtotalCell.textContent = product.subtotal;
+                        totalAmount = parseFloat(totalAmount) - parseFloat(product.selling_price); // Increment total amount
+                        document.getElementById('totalAmount').innerText = totalAmount;
+                        updateTotalPayable()
+                    }
+                });
+
+                incrementBtn.addEventListener('click', () => {
+                    product.quantity++;
+                    quantityLabel.textContent = product.quantity;
+                    product.subtotal = product.quantity * product.selling_price;
+                    subtotalCell.textContent = product.subtotal;
+                    totalAmount = parseFloat(totalAmount) + parseFloat(product.selling_price); // Increment total amount
+                    document.getElementById('totalAmount').innerText = parseFloat(totalAmount);
+                    updateTotalPayable()
+                });
+
+
+                // Add event listener to price input field
+                const productPriceInput = row.querySelector('.productPriceInput');
+                productPriceInput.addEventListener('input', () => {
+                    const newPrice = parseFloat(productPriceInput.value);
+                    if (!isNaN(newPrice)) {
+                        const quantity = product.quantity;
+                        const newSubtotal = newPrice * quantity;
+
+                        // Update product object and UI
+                        product.selling_price = newPrice;
+                        product.subtotal = newSubtotal;
+                        subtotalCell.textContent = newSubtotal;
+
+                        // Recalculate totalAmount
+                        updateTotalPayable()
+
+                        totalAmount = 0;
+                        saleItems.forEach(item => {
+                            totalAmount += parseFloat(item.subtotal);
+                        });
+                        document.getElementById('totalAmount').innerText = totalAmount;
+                    }
+                });
+
+
+
+                const deleteBtn = row.querySelector('.deleteBtn');
+
+                deleteBtn.addEventListener('click', () => {
+                    removeProductFromSale(index);
+                });
+            });
+        }
+
+
+    </script>
+
+
+    <script>
+        function removeProductFromSale(index) {
+            // Remove the product from the saleItems array
+            const removedProduct = saleItems.splice(index, 1)[0]; // Remove product from array
+            totalAmount -= removedProduct.subtotal; // Subtract subtotal from totalAmount
+            updateTotalPayable(); // Update the total payable amount in UI
+
+            // Re-render the sale items
+            renderSaleItems();
+
+            // Update the total payable amount
+        }
+    </script>
+    <script>
+        // Function to fetch product suggestions
+        function fetchProducts(searchTerm) {
+            fetch('/pos/search_products', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ searchTerm: searchTerm }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Populate product suggestions in a dropdown or list
+                    const suggestionsList = document.getElementById('productSuggestions');
+                    suggestionsList.innerHTML = ''; // Clear previous suggestions
+
+                    const suggestionContainer = document.createElement('div');
+                    suggestionContainer.classList.add('space-y-2'); // Add space between items
+
+                    data.forEach(product => {
+                        const listItem = document.createElement('button'); // Change to button
+                        listItem.classList.add('block', 'w-full', 'text-sm', 'text-left', 'px-4', 'py-2', 'text-gray-800', 'bg-white', 'rounded-md', 'focus:outline-none', 'focus:bg-gray-200', 'hover:bg-gray-200');
+
+                        // Remove default list point
+                        listItem.style.listStyleType = 'none';
+
+                        listItem.textContent = `${product.name} - ${product.barcode} - ${product.selling_price}`;
+
+                        listItem.addEventListener('click', () => {
+                            addProductToSale(product);
+                            document.getElementById('search_product').value = ''; // Clear input
+                            suggestionsList.innerHTML = ''; // Clear suggestions
+
+                            playBeep(); // Add product to sale when clicked
+                        });
+
+                        listItem.addEventListener('mouseover', () => {
+                            listItem.classList.add('bg-gray-200'); // Change background when hovered
+                        });
+
+                        listItem.addEventListener('mouseout', () => {
+                            listItem.classList.remove('bg-gray-200'); // Reset background when not hovered
+                        });
+
+                        suggestionContainer.appendChild(listItem);
+                    });
+
+                    suggestionsList.appendChild(suggestionContainer);
+
+                    if (data.length === 1) {
+                        addProductToSale(data[0]);
+                        playBeep();
+                        document.getElementById('search_product').value = ''; // Clear input
+                        suggestionsList.innerHTML = ''; // Clear suggestions
+
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching products:', error);
+                });
+        }
+
+        // Event listener for search input
+        document.getElementById('search_product').addEventListener('input', function (e) {
+            const searchTerm = e.target.value;
+            fetchProducts(searchTerm);
+        });
+
+
+        const beepSound = new Audio("{{ url_for('static', filename='audio/beep.mp3') }}");
+
+        function playBeep() {
+            beepSound.play();
+        }
+
+       
+
+
+    </script>
+
+
+
+    <script>
+        function saveCustomer() {
+            // Get values from the form
+            const username = document.getElementById('username').value;
+            const emailAddress = document.getElementById('emailAddress').value;
+            const mobile = document.getElementById('mobile').value;
+            const date = document.getElementById('date').value;
+            const textarea = document.getElementById('textarea').value;
+
+            // Create a customer object
+            const customer = {
+                username: username,
+                email: emailAddress,
+                mobile: mobile,
+                dob: date,
+                notes: textarea
+            };
+
+            // Send the customer data to the Flask backend
+            fetch('/pos/add_customer', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(customer),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Handle the response, e.g., show a success message or redirect
+                    console.log(data);
+                    alert('Customer added successfully!');
+                })
+                .catch(error => {
+                    console.error('Error adding customer:', error);
+                    alert('Error adding customer. Please try again.');
+                });
+        }
+
+    </script>
+
+
+    <script>
+        // Function to toggle discount type between percentage and fixed
+        let discountType = 'percentage';  // Default discount type is percentage
+
+        // Toggle discount type
+        document.getElementById('discountTypeBtn').addEventListener('click', function () {
+            if (discountType === 'percentage') {
+                discountType = 'fixed';
+                this.textContent = '$'; // Change button text to '$' for fixed discount
+            } else {
+                discountType = 'percentage';
+                this.textContent = '%'; // Change button text to '%' for percentage discount
             }
+
+            updateTotalPayable(); // Recalculate total when discount type changes
         });
 
-        incrementBtn.addEventListener('click', () => {
-            product.quantity++;
-            quantityLabel.textContent = product.quantity;
-            product.subtotal = product.quantity * product.selling_price;
-            subtotalCell.textContent = product.subtotal;
-            totalAmount = parseFloat(totalAmount) + parseFloat(product.selling_price); // Increment total amount
-            document.getElementById('totalAmount').innerText = parseFloat(totalAmount);
-            updateTotalPayable()
-        });
+        // Event listener for toggle discount type button
+
+    </script>
+    <script>
+        // Function to calculate and update total payable
+        // Function to calculate and update total payable
+        let countproduct=0
+        function updateTotalPayable() {
+            countproduct=0
+            pas1()
+            console.log(saleItems)
+            let total = 0;
+            let discount = parseFloat(document.getElementById('discountInput').value) || 0;
+            let gst = parseFloat(document.getElementById('gstInput').value) || 0;
+
+            // Calculate total amount from sale items
+            saleItems.forEach(item => {
+                countproduct+=parseFloat(item.quantity)
+                total += parseFloat(item.subtotal);
+            });
+            gst1=total * (gst / 100)
+            total += parseFloat(total * (gst / 100));
+
+            // Apply discount
+            let discount1=0
+            let discount3=0
+            let Symbol1=""
+            if (discountType === 'percentage') {
+                let discount2 = parseFloat((total * discount) / 100);
+                discount3=discount.toFixed(2)
+                discount1=discount2.toFixed(2)
+                total -= discount2.toFixed(2);
+                Symbol1='%'
+            } else if (discountType === 'fixed') {
+                discount3=discount.toFixed(2)
+                discount1=discount.toFixed(2)
+                total -= discount.toFixed(2);
+                Symbol1='$'
+
+            }
 
 
-// Add event listener to price input field
-const productPriceInput = row.querySelector('.productPriceInput');
-productPriceInput.addEventListener('input', () => {
-    const newPrice = parseFloat(productPriceInput.value);
-    if (!isNaN(newPrice)) {
-        const quantity = product.quantity;
-        const newSubtotal = newPrice * quantity;
+            // Apply GST
 
-        // Update product object and UI
-        product.selling_price = newPrice;
-        product.subtotal = newSubtotal;
-        subtotalCell.textContent = newSubtotal;
+            // Calculate due
 
-        // Recalculate totalAmount
-        updateTotalPayable()
+            // Update total amount in UI
 
-        totalAmount = 0;
-        saleItems.forEach(item => {
-            totalAmount += parseFloat(item.subtotal);
-        });
-        document.getElementById('totalAmount').innerText = totalAmount;
-    }
-});
-
-
-        
-const deleteBtn = row.querySelector('.deleteBtn');
-
-deleteBtn.addEventListener('click', () => {
-    removeProductFromSale(index);
-});
-    });
-}
-
-
-</script>
-
-
-<script>
-    function removeProductFromSale(index) {
-    // Remove the product from the saleItems array
-    const removedProduct = saleItems.splice(index, 1)[0]; // Remove product from array
-    totalAmount -= removedProduct.subtotal; // Subtract subtotal from totalAmount
-    updateTotalPayable(); // Update the total payable amount in UI
-
-    // Re-render the sale items
-    renderSaleItems();
-
-    // Update the total payable amount
-}
-</script>
-<script>
-// Function to fetch product suggestions
-function fetchProducts(searchTerm) {
-    fetch('/pos/search_products', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ searchTerm: searchTerm }),
-    })
-    .then(response => response.json())
-    .then(data => {
-        // Populate product suggestions in a dropdown or list
-        const suggestionsList = document.getElementById('productSuggestions');
-        suggestionsList.innerHTML = ''; // Clear previous suggestions
-
-        const suggestionContainer = document.createElement('div');
-        suggestionContainer.classList.add('space-y-2'); // Add space between items
-
-        data.forEach(product => {
-            const listItem = document.createElement('button'); // Change to button
-            listItem.classList.add('block', 'w-full','text-sm', 'text-left', 'px-4', 'py-2', 'text-gray-800', 'bg-white', 'rounded-md', 'focus:outline-none', 'focus:bg-gray-200', 'hover:bg-gray-200');
-
-            // Remove default list point
-            listItem.style.listStyleType = 'none';
-
-            listItem.textContent = `${product.name} - ${product.barcode} - ${product.selling_price}`;
             
-            listItem.addEventListener('click', () => {
-                addProductToSale(product);
-                document.getElementById('search_product').value = ''; // Clear input
-                suggestionsList.innerHTML = ''; // Clear suggestions
+            document.getElementById('totalAmount').innerText = total.toFixed(2);
+            document.getElementById('tas').value=total.toFixed(2);
+            document.getElementById('tas5').innerText="₹"+total.toFixed(2);
 
-                playBeep(); // Add product to sale when clicked
-            });
+            document.getElementById('pas').value=total.toFixed(2);
+            document.getElementById('tps').innerText=countproduct;
 
-            listItem.addEventListener('mouseover', () => {
-                listItem.classList.add('bg-gray-200'); // Change background when hovered
-            });
 
-            listItem.addEventListener('mouseout', () => {
-                listItem.classList.remove('bg-gray-200'); // Reset background when not hovered
-            });
+            document.getElementById('tds').innerText=`₹ ${discount1} (${discount3} ${Symbol1})`;
+            document.getElementById('tgs').innerText=`₹ ${gst1}  (${gst}%)`;
 
-            suggestionContainer.appendChild(listItem);
-        });
-
-        suggestionsList.appendChild(suggestionContainer);
-
-        if (data.length === 1) {
-            addProductToSale(data[0]);
-            playBeep();
-            document.getElementById('search_product').value = ''; // Clear input
-            suggestionsList.innerHTML = ''; // Clear suggestions
 
         }
-    })
-    .catch(error => {
-        console.error('Error fetching products:', error);
-    });
-}
 
-// Event listener for search input
-document.getElementById('search_product').addEventListener('input', function(e) {
-    const searchTerm = e.target.value;
-    fetchProducts(searchTerm);
-});
+        // Event listener for discount input
+        document.getElementById('discountInput').addEventListener('input', updateTotalPayable);
+
+        // Event listener for due input
+
+        // Event listener for GST input
+        document.getElementById('gstInput').addEventListener('input', updateTotalPayable);
+
+    </script>
+<script>
+    function pas1(){
+
+        tas1=document.getElementById("tas").value
+        pas2=document.getElementById("pas").value
+
+        document.getElementById("das").innerText=(tas1-pas2).toFixed(2)
+
+    }
+</script>
+
+<script>
+    function paynow(){
+        document.getElementById("Payment_gateway").className="block"
+        updateTotalPayable()
+   }
+</script>
 
 
-const beepSound = new Audio("{{ url_for('static', filename='audio/beep.mp3') }}");
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script>
+    function generateInvoice() {
+        console.log("gen")
+    // Fetch values from the form fields
+    let customerName = document.getElementById('cname').innerText;
+    let receivedAmount = document.querySelector('#firstc input[type="text"]').value;
+    let payingAmount = document.querySelector('#firstc input[type="text"]:nth-child(2)').value;
+    let dueAmount = document.querySelector('#firstc label[type="text"]').innerText;
+    // Add GST and Discount values similarly
 
-function playBeep() {
-    beepSound.play();
+    // Initialize jsPDF
+    let doc = new jsPDF();
+
+    // Set document properties
+    doc.setFontSize(18);
+    doc.text('Invoice', 10, 10);
+
+    // Add customer details
+    doc.setFontSize(12);
+    doc.text(`Customer Name: ${customerName}`, 10, 20);
+
+    // Add payment details
+    doc.text(`Received Amount: ${receivedAmount}`, 10, 30);
+    doc.text(`Paying Amount: ${payingAmount}`, 10, 40);
+    doc.text(`Due Amount: ${dueAmount}`, 10, 50);
+    // Add GST and Discount details similarly
+
+    // Save the PDF
+    doc.save('invoice.pdf');
 }
 
 
 </script>
 
-
-
 <script>
-    function saveCustomer() {
-    // Get values from the form
-    const username = document.getElementById('username').value;
-    const emailAddress = document.getElementById('emailAddress').value;
-    const mobile = document.getElementById('mobile').value;
-    const date = document.getElementById('date').value;
-    const textarea = document.getElementById('textarea').value;
+    function submitForm() {
+    const totalAmount = document.getElementById('tas').value;
+    const payingAmount = document.getElementById('pas').value;
+    const dueAmount = document.getElementById('das').innerText;
+    const paymentChoice = document.getElementById('paymentc').value;
+    const totalProduct = document.getElementById('tps').innerText;
+    const GST = document.getElementById('tgs').innerText;
+    const discount = document.getElementById('tds').innerText;
 
-    // Create a customer object
-    const customer = {
-        username: username,
-        email: emailAddress,
-        mobile: mobile,
-        dob: date,
-        notes: textarea
+   
+    const data = {
+        totalAmount,
+        payingAmount,
+        dueAmount,
+        paymentChoice,
+        totalProduct,
+        GST,
+        discount,
+        salesItems:saleItems  // use the saleItems array directly
+
     };
 
-    // Send the customer data to the Flask backend
-    fetch('/pos/add_customer', {
+    fetch('/pos/save_sale', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(customer),
+        body: JSON.stringify(data),
     })
     .then(response => response.json())
     .then(data => {
-        // Handle the response, e.g., show a success message or redirect
-        console.log(data);
-        alert('Customer added successfully!');
+        // Handle success
+        alert(data.message);
     })
     .catch(error => {
-        console.error('Error adding customer:', error);
-        alert('Error adding customer. Please try again.');
+        // Handle error
+        alert('Error saving sale');
     });
 }
 
 </script>
 
-
 <script>
-    // Function to toggle discount type between percentage and fixed
-let discountType = 'percentage';  // Default discount type is percentage
-
-// Toggle discount type
-document.getElementById('discountTypeBtn').addEventListener('click', function() {
-    if (discountType === 'percentage') {
-        discountType = 'fixed';
-        this.textContent = '$'; // Change button text to '$' for fixed discount
-    } else {
-        discountType = 'percentage';
-        this.textContent = '%'; // Change button text to '%' for percentage discount
+    function cancelForm(){
+        document.getElementById("Payment_gateway").className="hidden"
     }
-
-    updateTotalPayable(); // Recalculate total when discount type changes
-});
-
-// Event listener for toggle discount type button
-
 </script>
-<script>
-    // Function to calculate and update total payable
-// Function to calculate and update total payable
-function updateTotalPayable() {
-    let total = 0;
-    let discount = parseFloat(document.getElementById('discountInput').value) || 0;
-    let due = parseFloat(document.getElementById('dueInput').value) || 0;
-    let gst = parseFloat(document.getElementById('gstInput').value) || 0;
-
-    // Calculate total amount from sale items
-    saleItems.forEach(item => {
-        total += parseFloat(item.subtotal);
-    });
-    total += parseFloat(total * (gst / 100));
-
-    // Apply discount
-    if (discountType === 'percentage') {
-        let discount2 = parseFloat((total * discount) / 100);
-        total -= discount2;
-    } else if (discountType === 'fixed') {
-        total -= discount;
-    }
-
-
-    // Apply GST
-
-    // Calculate due
-    total -= due;
-
-    // Update total amount in UI
-    document.getElementById('totalAmount').innerText = total;
-}
-
-// Event listener for discount input
-document.getElementById('discountInput').addEventListener('input', updateTotalPayable);
-
-// Event listener for due input
-document.getElementById('dueInput').addEventListener('input', updateTotalPayable);
-
-// Event listener for GST input
-document.getElementById('gstInput').addEventListener('input', updateTotalPayable);
-
-</script>
-
-
 </body>
+
 </html>
