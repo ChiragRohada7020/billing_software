@@ -5,6 +5,8 @@ from pymongo import MongoClient
 app = Flask(__name__)
 client = MongoClient('mongodb://localhost:27017/')
 db = client['billing']
+app.config['SECRET_KEY'] = 'your_secret_key_here'
+
 
 from app.sales.routes import sales_bp
 from app.index.routes import index_bp

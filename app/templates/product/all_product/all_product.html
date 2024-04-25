@@ -1,0 +1,104 @@
+{% extends "./index.html" %}
+{% block content %}
+
+<div class="bg-gray-100 font-sans">
+    <div class="border-gray-200 border-b-2">
+        <h1 class="p-5 text-lg font-semibold">All Product</h1>
+    </div>
+
+    <div class="flex p-5 bg-gray-100">
+        <span class="p-1"><img class="w-5 text-white" src="https://cdn-icons-png.flaticon.com/128/54/54481.png" alt="Search icon"></span>
+        <input id="searchInput1" value="" onkeyup="handleSearch()" class="pl-2 border-2 focus:outline-none hover:border-blue-700 bg-gray-100 border-gray-400 rounded-xl text-sm p-1" type="text" placeholder="Search Product" name="search">
+    </div>
+
+    <div>
+        <table class="m-10 text-left">
+            <thead>
+                <tr class="border-b-2 border-gray-300 uppercase text-sm font-sans">
+                    <th class="px-8 py-3">Name</th>
+                    <th class="px-8 py-3">Barcode</th>
+                    <th class="px-8 py-3">Brand</th>
+                    <th class="px-8 py-3">Category</th>
+                    <th class="px-8 py-3">Cost</th>
+                    <th class="px-8 py-3">Selling Price</th>
+                    <th class="px-8 py-3">Edit</th>
+                    <th class="px-8 py-3">Delete</th>
+                </tr>
+            </thead>
+            <tbody id="productTableBody">
+                {% for product in products %}
+                <tr class="text-sm uppercase">
+                    <td class="px-8 py-3">{{ product.name }}</td>
+                    <td class="px-8 py-3">{{ product.barcode }}</td>
+                    <td class="px-8 py-3">{{ product.brand }}</td>
+                    <td class="px-8 py-3">{{ product.category }}</td>
+                    <td class="px-8 py-3">{{ product.cost }}</td>
+                    <td class="px-8 py-3">{{ product.selling_price }}</td>
+                    <td class="px-8 py-3">
+                        <a class="text-purple-800" href="{{ url_for('product_bp.edit_product', product_id=product._id) }}">Edit</a>
+                    </td>
+                    <td class="px-8 py-3">
+                        <a  onclick="return confirm('Are you sure you want to delete this product?')"  href="{{ url_for('product_bp.delete_product', product_id=product._id) }}" class=" border-2 border-red-600 font-semibold p-2 rounded-lg text-red-500">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+            let timeoutId;
+
+            function handleSearch() {
+                clearTimeout(timeoutId); // Clear any existing timeout
+
+                timeoutId = setTimeout(() => {
+                    const query = document.getElementById("searchInput1").value.trim();
+                    console.log('Search query:', query); // Debugging
+
+                    fetch(`/product/search_product?query=${query}`)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log('Filtered products:', data); // Debugging
+                            updateTable(data);
+                        })
+                        .catch(error => {
+                            console.error('Fetch error:', error); // Debugging
+                        });
+                }, 300); // Delay of 300ms
+            }
+
+            function updateTable(products) {
+                let html = '';
+
+                products.forEach(product => {
+                    html += `
+                        <tr class="text-sm uppercase">
+                            <td class="px-8 py-3">${product.name}</td>
+                            <td class="px-8 py-3">${product.barcode}</td>
+                            <td class="px-8 py-3">${product.brand}</td>
+                            <td class="px-8 py-3">${product.category}</td>
+                            <td class="px-8 py-3">${product.cost}</td>
+                            <td class="px-8 py-3">${product.selling_price}</td>
+                            <td class="px-8 py-3">
+                                <a class="text-purple-800" href="edit/${product.id}">Edit</a>
+                            </td>
+                            <td class="px-8 py-3">
+                                <a href="delete_product/${product.id}" class="bg-red-600 font-semibold p-2 rounded-xl text-white" onclick="return confirm('Are you sure you want to delete this product?')">Delete</a>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                document.getElementById("productTableBody").innerHTML = html;
+            }
+    </script>
+
+</div>
+
+{% endblock %}

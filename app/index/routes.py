@@ -11,12 +11,9 @@ index_bp = Blueprint('index', __name__)
 
 @index_bp.route('/', methods=['GET'])
 def home():
-    sales_data = today_sales_sum()
-    total_sales_amount = sales_data.get('total_sales_amount', 0)  # Using .get() to avoid KeyError
-    number_of_sales = sales_data.get('number_of_sales', 0)  # Using .get() to avoid KeyError
-    print(total_sales_amount)
-    return render_template("index.html", total_sales_amount=total_sales_amount, number_of_sales=number_of_sales)
-
+    sales_data = sale_data()
+    # number_of_sales = sales_data.get('number_of_sales', 0)  # Using .get() to avoid KeyError
+    return render_template("index.html", total_sales_amount=sales_data['total_sales_today'],percentage_change_sales=sales_data['percentage_change'],num_sales_today=sales_data['num_sales_today'],percentage_change_customer=sales_data['percentage_change_customer'])
 
 
 @index_bp.route('/search_routes', methods=['POST'])
@@ -37,34 +34,69 @@ def search_routes():
 
     return jsonify(matched_routes)
 
-
-def today_sales_sum():
-    # Get today's date and time
-    today_date = datetime.combine(datetime.now().date(), datetime.min.time())
-    print(f"Today's date: {today_date}")
-
-    # Convert to UTC datetime for MongoDB query
-    utc_today_date = today_date.astimezone(timezone.utc)
-    print(f"UTC Today's date: {utc_today_date}")
-
-    # Query for distinct sales made today
-    today_sales = db.sales.distinct('total_amount', {
-        "date": {"$gte": utc_today_date, "$lt": utc_today_date + timedelta(days=1)}
+def sale_data():
+    # Get the current UTC date and time as a datetime object
+    # Get the current UTC date and time as a datetime object
+    current_utc_datetime = datetime.now(timezone.utc)
+    
+    # Calculate the start and end of today in UTC
+    start_of_today = datetime(current_utc_datetime.year, current_utc_datetime.month, current_utc_datetime.day, 0, 0, 0, tzinfo=timezone.utc)
+    end_of_today = datetime(current_utc_datetime.year, current_utc_datetime.month, current_utc_datetime.day, 23, 59, 59, tzinfo=timezone.utc)
+    
+    # Calculate the start and end of yesterday in UTC
+    start_of_yesterday = start_of_today - timedelta(days=1)
+    end_of_yesterday = end_of_today - timedelta(days=1)
+    
+    # Query MongoDB for sales records between start_of_yesterday and end_of_yesterday
+    sales_records_yesterday = db.sales.find({
+        "datetime": {
+            "$gte": start_of_yesterday,
+            "$lte": end_of_yesterday
+        }
     })
+    
+    sales_records_yesterday_list=list(sales_records_yesterday)
+    
+    # Calculate the total sales for yesterday
+    total_sales_yesterday = sum([float(sale['totalAmount']) for sale in sales_records_yesterday_list])
+    
+    # Query MongoDB for sales records between start_of_today and end_of_today
+    sales_records_today = db.sales.find({
+        "datetime": {
+            "$gte": start_of_today,
+            "$lte": end_of_today
+        }
+    })
+    sales_records_today_list=list(sales_records_today)
 
-    # Calculate total sales amount and number of sales
-    total_sales_amount = sum(today_sales)
-    number_of_sales = len(today_sales)
-    print(f"Number of sales for today: {number_of_sales}")
+ 
+    # Calculate the total sales for today
+    total_sales_today = sum([float(sale['totalAmount']) for sale in sales_records_today_list])
+    
+    # Calculate the percentage change compared to yesterday
+    if total_sales_yesterday == 0:
+        percentage_change = 100  # To avoid division by zero
+    else:
+        percentage_change = ((total_sales_today - total_sales_yesterday) / total_sales_yesterday) * 100
 
+    print(sales_records_today_list)
+
+
+
+
+
+    if len(sales_records_yesterday_list) == 0:
+        percentage_change_customer = 100  # To avoid division by zero
+    else:
+        percentage_change_customer = ((len(sales_records_today_list) - len(sales_records_yesterday_list)) / len(sales_records_yesterday)) * 100
+    
     return {
-        "message": "Today's sales sum calculated successfully!",
-        "total_sales_amount": total_sales_amount,
-        "number_of_sales": number_of_sales
+        "total_sales_yesterday": total_sales_yesterday,
+        "total_sales_today": total_sales_today,
+        "percentage_change": percentage_change,
+        "num_sales_today": len(sales_records_today_list),
+        "percentage_change_customer": percentage_change_customer
     }
-    
-    
-    
 
 # @index_bp.route('/sales', methods=['POST'])
 # def add_sale():

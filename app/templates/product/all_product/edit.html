@@ -7,9 +7,9 @@
 
 <div class="bg-gray-100   font-sans">
     <div class=" border-gray-200 border-b-2">
-        <h1 class="p-5 text-lg font-sans font-semibold">Create Product</h1>
+        <h1 class="p-5 text-lg font-sans font-semibold">Edit Product</h1>
     </div>
-<form action="/product/create_product" method="post">
+<form action="{{ url_for('product_bp.edit_product', product_id=product['_id']) }}" method="post">
     <div class="bg-gray-50 m-5 rounded-lg shadow-lg shadow-gray-400">
 
         <div class="grid grid-cols-2 p-5 gap-10">
@@ -17,13 +17,13 @@
             <div class="mb-4 flex flex-col gap-2">
                 <label for="name" class="block font-sans text-black text-xs font-medium">Name:</label>
                 <input type="text" id="name" name="name" class="form-input text-xs bg-gray-100 p-2 border-2 border-gray-300 rounded-md"
-                    placeholder="Enter product name" required>
+                    placeholder="Enter product name" value="{{product.name}}" required>
             </div>
             <div class="flex flex-col gap-2">
                 <label for="category" class="block font-sans text-black text-xs font-medium">Category:</label>
-                <select id="category" name="category" onchange="toggleOtherCategory()"
+                <select id="category" name="category" onchange="toggleOtherCategory()" 
                     class="form-select text-xs uppercase bg-gray-100 p-2 border-gray-300 border-2 rounded-md" required>
-                    <option value="" disabled selected>Select category</option>
+                    <option value="{{product.brand}}"  >{{product.category}}</option>
                     {% for category in categories %}
                         <option value="{{ category }}">{{ category }}</option>
                     {% endfor %}
@@ -40,12 +40,12 @@
                 ">Cost Price:</label>
                 <input type="number" id="cost" name="cost" class="form-input border-2 text-xs bg-gray-100 p-2 border-gray-300 rounded-md
                 "
-                    placeholder="Enter cost price" required>
+                value="{{product.cost}}"  placeholder="Enter cost price" required>
             </div>
             <div class="flex flex-col gap-2">
                 <label for="selling_price" class="block font-sans text-black text-xs font-medium
                 ">Selling Price:</label>
-                <input type="number" id="selling_price" name="selling_price"
+                <input type="number" id="selling_price" value="{{product.selling_price}}" name="selling_price"
                     class="form-input text-xs bg-gray-100 p-2 border-gray-300 border-2 rounded-md
                     " placeholder="Enter selling price" required>
             </div>
@@ -57,7 +57,7 @@
                 <label for="brand" class="block font-sans text-black text-xs font-medium">Brand:</label>
                 <select id="brand" name="brand" onchange="toggleOtherBrand()"
                     class="form-select text-xs uppercase bg-gray-100 p-2 border-gray-300 border-2 rounded-md" required>
-                    <option value="" disabled selected>Select brand</option>
+                    <option value="{{product.brand}}" disabled selected>{{product.brand}}</option>
                     {% for brand in brands %}
                         <option value="{{ brand }}">{{ brand }}</option>
                     {% endfor %}
@@ -74,12 +74,12 @@
                 ">GST (%):</label>
                 <input type="number" id="gst" name="gst" class="form-input border-2 text-xs bg-gray-100 p-2 border-gray-300 rounded-md
                 "
-                    placeholder="Enter GST percentage">
+                value="{{product.gst}}"      placeholder="Enter GST percentage">
             </div>
             <div class=" flex flex-col gap-2">
                 <label for="barcode" class="block font-sans text-black text-xs font-medium">Barcode:</label>
                 <input type="text" id="barcode" name="barcode" class="form-input text-xs border-2 bg-gray-100 p-2 border-gray-300 rounded-md"
-                    placeholder="Enter barcode">
+                value="{{product.barcode}}"    placeholder="Enter barcode">
             </div>
             
            
@@ -89,7 +89,7 @@
 
         <div class="">
             <button type="submit" class="bg-blue-500 text-sm hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
-                Add Product
+                Edit Product
             </button>
         </div>
         </div>

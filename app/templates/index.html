@@ -1382,7 +1382,7 @@ video {
                         <a href="/product/create_product" class="text-gray-900 text-sm flex items-center hover:text-[#f84525] before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Create Product </a>
                     </li> 
                     <li class="mb-4">
-                        <a href="" class="text-gray-900 text-sm flex items-center hover:text-[#f84525] before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">All Products</a>
+                        <a href="{{ url_for('product_bp.list_products') }}" class="text-gray-900 text-sm flex items-center hover:text-[#f84525] before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">All Products</a>
                     </li> 
                     <li class="mb-4">
                         <a href="" class="text-gray-900 text-sm flex items-center hover:text-[#f84525] before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Print Labels </a>
@@ -1654,23 +1654,12 @@ video {
                         <div>
                             <div class="flex items-center mb-1">
                                 <div class="text-2xl font-semibold" id="user_attendance">₹ {{total_sales_amount}}</div>
+                                <div class="p-1 rounded bg-emerald-500/10 text-emerald-500 text-[12px] font-semibold leading-none ml-2">+{{percentage_change_sales}}%</div>
+
                             </div>
                             <div class="text-sm font-medium text-gray-400">Today Sales</div>
                         </div>
-                         <div class="dropdown">
-                            <button type="button" class="dropdown-toggle text-gray-400 hover:text-gray-600"><i class="ri-more-fill"></i></button>
-                            <ul class="dropdown-menu shadow-md shadow-black/5 z-30 hidden py-1.5 rounded-md bg-white border border-gray-100 w-full max-w-[140px]">
-                                <li>
-                                    <a href="#" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Profit</a>
-                                </li>
-                                <li>
-                                    <a href="#" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Due</a>
-                                </li>
-                                <li>
-                                    <a href="#" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Logout</a>
-                                </li>
-                            </ul>
-                        </div> 
+                        
                     </div>
 
                     <a href="{{ url_for('sales.get_sales') }}" class="text-[#f84525] font-medium text-sm hover:text-red-800">View</a>
@@ -1679,8 +1668,8 @@ video {
                     <div class="flex justify-between mb-4">
                         <div>
                             <div class="flex items-center mb-1">
-                                <div class="text-2xl font-semibold">{{number_of_sales}}</div>
-                                <div class="p-1 rounded bg-emerald-500/10 text-emerald-500 text-[12px] font-semibold leading-none ml-2">+30%</div>
+                                <div class="text-2xl font-semibold">{{num_sales_today}}</div>
+                                <div class="p-1 rounded bg-emerald-500/10 text-emerald-500 text-[12px] font-semibold leading-none ml-2">+{{percentage_change_customer}}%</div>
                             </div>
                             <div class="text-sm font-medium text-gray-400">Today Customer</div>
                         </div>
