@@ -30,16 +30,16 @@ def get_sales():
 
     # Apply filters to the base query
     if start_date:
-        query['date'] = {'$gte': start_date}
+        query['datetime'] = {'$gte': start_date}
     
     if end_date:
-        query['date'] = {'$lte': end_date}
+        query['datetime'] = {'$lte': end_date}
     
     if customer_name:
         query['customer_name'] = {'$regex': f'.*{customer_name}.*', '$options': 'i'}
     
     if due:
-        query['change_due'] = int(due)  # Convert due to integer if necessary
+        query['dueAmount'] = int(due)  # Convert due to integer if necessary
 
     # Fetch filtered sales records from MongoDB
     sales_data = sales_collection.find(query)

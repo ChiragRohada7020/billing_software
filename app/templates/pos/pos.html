@@ -30,7 +30,7 @@
                                 <select onclick="fetchCustomers()" 
                                     class="block w-full p-2 text-gray-900  font-sans font-semibold uppercase    border-2 border-gray-400 bg-white text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     name="" id="showcustmoer" >
-                                    <option value="Walk-IN-Customer">Walk-IN-Customer</option>
+                                    <option  value="Walk-IN-Customer">Walk-IN-Customer</option>
                                 </select>
                                 <button onclick="AddCustomers() "
                                     class="bg-purple-500 text-white font-bold rounded-lg rounded-l-none px-5 py-1 text-xl">+</button>
@@ -838,9 +838,33 @@
     const totalProduct = document.getElementById('tps').innerText;
     const GST = document.getElementById('tgs').innerText;
     const discount = document.getElementById('tds').innerText;
+    const customer_id=document.getElementById("showcustmoer").value
+    const customer_index=document.getElementById("showcustmoer").options[document.getElementById("showcustmoer").selectedIndex]
+    const customer_name=customer_index.textContent
+    var payment_status=""
+
+
+    console.log(customer_name)
+    if (totalAmount>0 && payingAmount>0 &&  parseInt(totalAmount)-parseInt(payingAmount)>0){
+        payment_status="partial"
+
+    }
+    else if(payingAmount==0 || payingAmount==""){
+        payment_status="unpaid"
+
+    }
+    else{
+        payment_status="paid"
+
+    }
+
+
+
 
    
     const data = {
+        customer_id,
+        customer_name,
         totalAmount,
         payingAmount,
         dueAmount,
@@ -848,6 +872,7 @@
         totalProduct,
         GST,
         discount,
+        payment_status,
         salesItems:saleItems  // use the saleItems array directly
 
     };

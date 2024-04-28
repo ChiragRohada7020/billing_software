@@ -26,12 +26,12 @@ def search_product():
         'selling_price': product['selling_price'],
         'id': str(product['_id'])
     } for product in products if 
-        query in product['name'].lower() or 
-        query in product['barcode'].lower() or 
-        query in product['brand'].lower() or 
-        query in product['category'].lower()]
+        (product['name'] and query in product['name'].lower()) or  # Check if name exists and matches query
+        (product['barcode'] and query in product['barcode'].lower()) or  # Check if barcode exists and matches query
+        (product['brand'] and query in product['brand'].lower()) or  # Check if brand exists and matches query
+        (product['category'] and query in product['category'].lower())]  # Check if category exists and matches query
 
-    # Return filtered products as JSONfil
+    # Return filtered products as JSON
     print(filtered_products)
     return jsonify(filtered_products)
 

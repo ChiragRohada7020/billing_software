@@ -88,14 +88,14 @@ def sale_data():
     if len(sales_records_yesterday_list) == 0:
         percentage_change_customer = 100  # To avoid division by zero
     else:
-        percentage_change_customer = ((len(sales_records_today_list) - len(sales_records_yesterday_list)) / len(sales_records_yesterday)) * 100
+        percentage_change_customer = ((len(sales_records_today_list) - len(sales_records_yesterday_list)) / len(sales_records_yesterday_list)) * 100
     
     return {
-        "total_sales_yesterday": total_sales_yesterday,
-        "total_sales_today": total_sales_today,
-        "percentage_change": percentage_change,
+        "total_sales_yesterday": int(total_sales_yesterday),
+        "total_sales_today": int(total_sales_today),
+        "percentage_change": int(percentage_change),
         "num_sales_today": len(sales_records_today_list),
-        "percentage_change_customer": percentage_change_customer
+        "percentage_change_customer": int(percentage_change_customer)
     }
 
 # @index_bp.route('/sales', methods=['POST'])

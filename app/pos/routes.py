@@ -1,8 +1,9 @@
 # app/sales/routes.py
 from flask import Blueprint, render_template,request,jsonify
 from app import db
-from datetime import datetime,timezone
+from datetime import datetime,timezone, timedelta
 from bson import ObjectId
+
 
 
 pos_bp = Blueprint('pos_bp', __name__)
@@ -70,11 +71,16 @@ def save_sale():
     # Save customer
     if data:
 
-    # Format the date and time as per the desired format
-        current_utc_datetime = datetime.now(timezone.utc)
+        current_utc_datetime = datetime.now(timezone.utc)   
 
-    # Add the formatted datetime to the data
-        data['datetime'] = current_utc_datetime
+# Define the time difference to adjust by (5 hours and 35 minutes)
+        adjustment = timedelta(hours=5, minutes=30)
+
+# Adjust the current UTC datetime by subtracting the adjustment
+        adjusted_utc_datetime = current_utc_datetime + adjustment
+
+# Add the adjusted datetime to the data
+        data['datetime'] = adjusted_utc_datetime
 
         db.sales.insert_one(data)
         return jsonify({"message": "Sale saved successfully!"})

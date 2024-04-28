@@ -1654,8 +1654,11 @@ video {
                         <div>
                             <div class="flex items-center mb-1">
                                 <div class="text-2xl font-semibold" id="user_attendance">₹ {{total_sales_amount}}</div>
-                                <div class="p-1 rounded bg-emerald-500/10 text-emerald-500 text-[12px] font-semibold leading-none ml-2">+{{percentage_change_sales}}%</div>
-
+                                {% if percentage_change_sales > 0  %}
+                                <div class="p-1 rounded bg-emerald-500/10 text-emerald-500 text-[12px] font-semibold leading-none ml-2">{{percentage_change_sales}}%</div>
+                           {% else %}
+                           <div class="p-1 rounded bg-emerald-500/10 text-red-500 text-[12px] font-semibold leading-none ml-2">{{percentage_change_sales}}%</div>
+                           {% endif %}
                             </div>
                             <div class="text-sm font-medium text-gray-400">Today Sales</div>
                         </div>
@@ -1669,8 +1672,13 @@ video {
                         <div>
                             <div class="flex items-center mb-1">
                                 <div class="text-2xl font-semibold">{{num_sales_today}}</div>
-                                <div class="p-1 rounded bg-emerald-500/10 text-emerald-500 text-[12px] font-semibold leading-none ml-2">+{{percentage_change_customer}}%</div>
-                            </div>
+                                {% if percentage_change_customer>0  %}
+                                <div class="p-1 rounded bg-emerald-500/10 text-emerald-500 text-[12px] font-semibold leading-none ml-2">{{percentage_change_customer}}%</div>
+                           {% else %}
+                           <div class="p-1 rounded bg-emerald-500/10 text-red-500 text-[12px] font-semibold leading-none ml-2">{{percentage_change_customer}}%</div>
+                           {% endif %}
+
+                              </div>
                             <div class="text-sm font-medium text-gray-400">Today Customer</div>
                         </div>
                          <div class="dropdown">
