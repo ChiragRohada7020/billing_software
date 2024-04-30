@@ -6,15 +6,13 @@
         <h1 class="p-5 text-lg font-semibold text-center">Sales Data</h1>
         
       <div class="flex ">
-        <form method="GET" action="/sales/" class="  ">
             <!-- Search Bar -->
             <div class=" w-full md:w-1/2 p-5 ">
                 <label for="search" class="block text-gray-700 text-sm font-bold mb-2">Search:</label>
-                <input type="text" id="search" name="customer_name" placeholder="Search .." class="shadow appearance-none border rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="{{ request.args.get('customer_name', '') }}">
+                <input oninput="handleSearch()" type="text" id="searchInput3" name="customer_name" placeholder="Search .." class="shadow appearance-none border rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="">
             </div>
 
            
-        </form>
 
       </div>
 
@@ -42,7 +40,7 @@
                         <th class="px-8 py-3">Date</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="salesTableBody">
                     {% for sale in sales %}
                     <tr class="text-sm text-center">
                         <td class="px-8 py-3">{{ sale._id }}</td>
@@ -129,4 +127,61 @@
 </aside>
     </div>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    // Function to handle search
+    function handleSearch() {
+        var searchQuery = document.getElementById('searchInput3').value;
+        console.log(searchQuery)
+        // Send search query to server
+        fetch('/sales/search?searchTerm=' + encodeURIComponent(searchQuery))
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                // Render search results
+                renderSalesTable(data);
+            });
+    }
+
+    // Function to render sales table
+    function renderSalesTable(salesData) {
+        var tableBody = document.getElementById('salesTableBody');
+        tableBody.innerHTML = ''; // Clear previous data
+        
+        // Iterate over sales data and create table rows
+        salesData.forEach(sale => {
+            var row = document.createElement('tr');
+            row.className = 'text-sm text-center';
+            row.innerHTML = `
+                <td class="px-8 py-3">${sale.customer_id}</td>
+                <td class="px-8 py-3">${sale.customer_name}</td>
+                <td class="px-8 py-3">${sale.totalAmount}</td>
+                <td class="px-8 py-3">${sale.payingAmount}</td>
+                <td class="px-8 py-3">${formatPaymentStatus(sale.payment_status)}</td>
+                <td class="px-8 py-3">${sale.dueAmount}</td>
+                <td class="px-8 py-3">${formatDate(sale.datetime)}</td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    // Helper function to format payment status
+    function formatPaymentStatus(status) {
+        if (status === "partial") {
+            return `<span class="border-2 p-1 px-3 rounded-lg text-purple-600 border-purple-600">${status}</span>`;
+        } else if (status === "unpaid") {
+            return `<span class="border-2 p-1 px-3 rounded-lg text-red-600 border-red-600">${status}</span>`;
+        } else {
+            return `<span class="border-2 p-1 px-4 rounded-lg text-green-600 border-green-600">${status}</span>`;
+        }
+    }
+
+    // Helper function to format date
+    function formatDate(dateStr) {
+        // Implement date formatting logic according to your requirement
+        return dateStr;
+    }
+</script>
+
 {% endblock %}

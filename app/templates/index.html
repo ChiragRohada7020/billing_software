@@ -2113,49 +2113,6 @@ video {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
-function searchRoutes() {
-    let searchTerm = $('#searchInput').val().toLowerCase();
-
-    $.ajax({
-        url: '/search_routes',
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify({ searchTerm: searchTerm }),
-        success: function(response) {
-            displaySearchResults(response);
-        },
-        error: function(error) {
-            console.error('Error searching routes:', error);
-        }
-    });
-}
-function displaySearchResults(results) {
-    let resultList = $('#searchResults');
-    resultList.empty();
-
-    if (results.length === 0) {
-        resultList.append('<li>No results found</li>');
-        return;
-    }
-
-    // Display only top 3 results
-    results.slice(0, 3).forEach(function(route) {
-        resultList.append(`
-            <li>
-                <button class="selectRouteBtn" data-route-url="${route.url}">
-                    ${route.name}
-                </button>
-            </li>
-        `);
-    });
-
-    // Add event listener to select route buttons
-    $('.selectRouteBtn').click(function() {
-        let routeUrl = $(this).data('route-url');
-        window.location.href = routeUrl;
-    });
-}
-
 
 
         // start: Sidebar
@@ -2337,74 +2294,8 @@ function displaySearchResults(results) {
             }
         });
 
-        function generateNDays(n) {
-            const data = []
-            for(let i=0; i<n; i++) {
-                const date = new Date()
-                date.setDate(date.getDate()-i)
-                data.push(date.toLocaleString('en-US', {
-                    month: 'short',
-                    day: 'numeric'
-                }))
-            }
-            return data
-        }
-        function generateRandomData(n) {
-            const data = []
-            for(let i=0; i<n; i++) {
-                data.push(Math.round(Math.random() * 10))
-            }
-            return data
-        }
-        // end: Chart
-
-        $(document).ready(function() {
-            // Function to update number of employees present today
-            function updateNumPresentEmployees() {
-                $.ajax({
-                    url: '/num_present_employees',  // Server-side endpoint to fetch number of present employees
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(data) {
-                        // Update number of present employees
-                        document.getElementById("user_attendance").innerHTML= data.num_present_employees
-                        // var content = '<p>Number of employees present today: ' + data.num_present_employees + '</p>';
-                        // $('#num-present-employees').html(content);
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.log('Error:', textStatus, errorThrown);
-                    }
-                });
-            }
-
-            // Function to update number of logged-in employees
-            function updateNumLoggedInEmployees() {
-                $.ajax({
-                    url: '/num_logged_in_employees',  // Server-side endpoint to fetch number of logged-in employees
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(data) {
-                        // Update number of logged-in employees
-                        var content = '<p>Number of employees logged in: ' + data.num_logged_in_employees + '</p>';
-                        $('#num-logged-in-employees').html(content);
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.log('Error:', textStatus, errorThrown);
-                    }
-                });
-            }
-
-            // Update number of present employees every 30 seconds
-            setInterval(updateNumPresentEmployees, 100000);
-
-            // Update number of logged-in employees every 30 seconds
-            setInterval(updateNumLoggedInEmployees, 100000);
-
-            // Initial update on page load
-            updateNumPresentEmployees();
-            updateNumLoggedInEmployees();
-        });
     
+
     </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
