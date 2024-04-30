@@ -31,8 +31,7 @@ def search_sales():
         
         query = {
             '$or': [
-                {'customer_name': {'$regex': search_term, '$options': 'i'}},
-                {'totalAmount': {'$regex': search_term, '$options': 'i'}}
+                {'customer_name': {'$regex': search_term, '$options': 'i'}}
                 # Add more fields to search here if needed
             ]
         }
