@@ -30,7 +30,7 @@
                                 <select onclick="fetchCustomers()" 
                                     class="block w-full p-2 text-gray-900  font-sans font-semibold uppercase    border-2 border-gray-400 bg-white text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     name="" id="showcustmoer" >
-                                    <option  value="Walk-IN-Customer">Walk-IN-Customer</option>
+                                    <option id="edit_customer"  value="Walk-IN-Customer">Walk-IN-Customer</option>
                                 </select>
                                 <button onclick="AddCustomers() "
                                     class="bg-purple-500 text-white font-bold rounded-lg rounded-l-none px-5 py-1 text-xl">+</button>
@@ -84,7 +84,7 @@
                                             <label class="text-xs" for="">Discount (₹)</label>
                                             <div class="flex  ">
                                                 <input id="discountInput" type="text"
-                                                    class="w-32 bg-gray-100 border-gray-500 border-2 p-1  rounded-lg rounded-r-none">
+                                                    class="w-32 bg-gray-100 border-gray-500 border-2 p-1  rounded-lg rounded-r-none" value="">
                                                 <button id="discountTypeBtn"
                                                     class="bg-gray-100 px-2 border-green-500 border-2 p-1 rounded-lg rounded-l-none ">%</button>
                                             </div>
@@ -95,7 +95,7 @@
 
                                     <div class="mt-8 flex gap-10">
                                         <button type="button" onclick="paynow()"
-                                            class="text-white bg-purple-700 hover:bg-purple-800   focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-purple-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">PayNow</button>
+                                            class="text-white bg-purple-700 hover:bg-purple-800   focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-purple-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Edit</button>
                                         <button type="button"
                                             class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Draft</button>
 
@@ -394,16 +394,15 @@
             if (existingProduct) {
                 existingProduct.quantity += 1; // Increment quantity
                 existingProduct.subtotal = existingProduct.quantity * existingProduct.selling_price;
-                totalAmount = parseFloat(totalAmount) + parseFloat(existingProduct.selling_price); // Increment total amount
-                document.getElementById('totalAmount').innerText = parseFloat(totalAmount);
+                updateTotalPayable()
 
                 // Update subtotal
             } else {
                 // Add product to saleItems array with quantity of 1
                 product.quantity = 1;
                 product.subtotal = product.selling_price;
-                totalAmount = parseFloat(totalAmount) + parseFloat(product.selling_price); // Increment total amount
-                document.getElementById('totalAmount').innerText = parseFloat(totalAmount);
+                updateTotalPayable()
+
 
 
                 saleItems.push(product);
@@ -881,7 +880,7 @@
 
     };
 
-    fetch('/pos/save_sale', {
+    fetch('/sales/create_sale/66327743e28d90eeed1aea1f', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -906,6 +905,70 @@
         document.getElementById("Payment_gateway").className="hidden"
     }
 </script>
+
+<script>
+    // Function to fetch sale details based on sale ID
+  
+// Update the onload function to call renderSaleItems after populating the form fields
+window.onload = function() {
+// Replace 'api/get_sale_details' with your actual backend API endpoint
+fetch(`/sales/get_sale_details/66327743e28d90eeed1aea1f`, {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json'
+    }
+})
+.then(response => response.json())
+.then(data => {
+    console.log(data);
+    
+    // Populate form fields with fetched data
+    var datetimeString = data.datetime;
+    var datetime = new Date(datetimeString);
+    var date = datetime.toISOString().split('T')[0];
+    const gstString = data.GST
+    const parts2 = gstString.split(/\s+|\(|\)|%/);
+    const gstValue = parseFloat(parts2[3]);
+
+
+    const discountString = data.discount
+    const parts = discountString.split(/\s+|\(|\)/);
+    const discountValue = parseFloat(parts[3]);
+
+
+    document.getElementById("gstInput").value=gstValue
+
+    document.getElementById("discountInput").value=discountValue
+
+    document.getElementById("edit_customer").value=data.customer_id
+
+    document.getElementById("edit_customer").innerHTML=data.customer_name
+
+    
+
+
+    // Store fetched sale items into the global variable
+    saleItems = data.salesItems;
+    totalAmount=data.totalAmount
+
+    // Populate sale items table with fetched items
+    renderSaleItems(saleItems);
+    updateTotalPayable()
+
+})
+.catch(error => console.error('Error:', error));
+};
+    // Function to save edited sale
+    function saveEditedSale() {
+        // Add your save sale logic here
+    }
+
+    // Function to cancel editing sale
+    function cancelEditSale() {
+        // Add your cancel logic here
+    }
+</script>
+
 </body>
 
 </html>
