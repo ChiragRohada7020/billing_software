@@ -1,33 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "./index.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>Point of Sale</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+{% block content %}
+<div class="bg-gray-100 h-full px-0 py-0 pb-8">
 
-   
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
-
-<body class="bg-white">
-
+<h1 id="sale_id_edit" class="hidden">{{sale_id}}</h1>
      <div class="justify-center mx-auto ">
         <nav>
-
+            <div class="border-gray-200 border-b-2">
+                <h1 class="p-5 text-2xl font-semibold">Sales</h1>
+            </div>
         </nav>
 
 
-        <main class="" id="main">
+        <main class="bg-white shadow-md m-5 rounded-xl border-2 border-gray-200" id="main">
 
-            <div class="grid grid-cols-2 ">
+            <div class=" ">
 
-                <first_Grid>
+                <first_Grid id="first_Grid" class="">
                     <div>
                         <div class="flex flex-col p-5 pl-2">
-                            <div class="p-2 flex flex-row">
-                                <select onclick="fetchCustomers()" 
+                            <div id="Upper_bock" class="p-2 gap-10 flex flex-row">
+                               <div id="customer_name_block" class="p-2 flex flex-col gap-2">
+                                <h1 class="text-sm font-medium">Add Customer</h1>
+                                <div   class=" flex flex-row">
+                                    <select onclick="fetchCustomers()" 
                                     class="block w-full p-2 text-gray-900  font-sans font-semibold uppercase    border-2 border-gray-400 bg-white text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     name="" id="showcustmoer" >
                                     <option id="edit_customer"  value="Walk-IN-Customer">Walk-IN-Customer</option>
@@ -35,7 +31,40 @@
                                 <button onclick="AddCustomers() "
                                     class="bg-purple-500 text-white font-bold rounded-lg rounded-l-none px-5 py-1 text-xl">+</button>
                                 <!-- <img onclick="AddCustomers() " class="w-8 h-8 cursor-pointer" c src="https://cdn4.iconfinder.com/data/icons/media-buttons/512/add-512.png" alt=""> -->
+                                   </div>
+                               </div>
+
+                               <div class="p-2 flex flex-col gap-2  ">
+                                <h1 class="text-sm">Date</h1>
+                                <input id="date_edit" class="p-1 rounded-lg bg-gray-100 " type="date">
+                               </div>
                             </div>
+                            
+                            <content id="second_content">
+
+                                <div class="p-2 mt-5 w-full">
+    
+                                    <div class='w-full px-2 '>
+                                        <div
+                                            class="relative flex items-center w-full h-12 rounded-lg focus-within:shadow-lg bg-gray-100 overflow-hidden">
+                                            <div class="grid place-items-center h-full w-12 text-gray-800">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                                                    viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                                </svg>
+                                            </div>
+    
+                                            <input
+                                                class="peer h-full w-full outline-none text-sm bg-gray-100 text-black pr-2"
+                                                type="text" id="search_product" placeholder="Search something.." />
+                                        </div>
+                                        <div id="productSuggestions"></div>
+    
+                                    </div>
+                                </div>
+                        </div>
+                        </content>
 
 
 
@@ -66,9 +95,10 @@
                                     <div class="bg-blue-200 px-5 py-2 text-center">
                                         <label class="font-bold " for="">Total Payable :- ₹ </label> <span
                                             id="totalAmount"
-                                            class="  text-blue-800 text-lg   font-semibold me-2  rounded dark:bg-blue-900 dark:text-blue-300">0</span>
+                                            class=" font-bold  text-black text-lg    me-2  rounded ">0</span>
 
                                     </div>
+
 
                                     <div class="grid grid-cols-3 gap-10  mt-5 text-sm font-semibold ">
                                         <div class="flex flex-col w-32 text-sm gap-2">
@@ -80,6 +110,7 @@
                                                     class="bg-gray-100 px-2 border-gray-500 border-2 p-1 rounded-lg rounded-l-none ">%</button>
                                             </div>
                                         </div>
+                                        
                                         <div class="flex flex-col  w-32 gap-2 text-sm">
                                             <label class="text-xs" for="">Discount (₹)</label>
                                             <div class="flex  ">
@@ -112,95 +143,68 @@
                     <add_customer id="addcustomerform" class="hidden">
 
                         <!-- component -->
-                        <section class="max-w-4xl p-6 mx-auto bg-gray-700 rounded-md shadow-md dark:bg-gray-800 mt-20">
-                            <h1 class="text-lg font-bold text-white capitalize dark:text-white">Add Customer</h1>
-                            <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2 text-xs">
-                                <div>
-                                    <label class="text-white dark:text-gray-200" for="username">Username</label>
-                                    <input id="username" type="text"
-                                        class="block w-full px-2 py-1 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
+                        <section class="fixed inset-0 flex items-center justify-center bg-gray-100 bg-opacity-50">
+                            <div class="max-w-4xl p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800">
+                                <h1 class="text-lg font-bold text-gray-800 capitalize dark:text-white">Add Customer</h1>
+                                <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2 text-xs">
+                                    <div>
+                                        <label class="text-gray-800 dark:text-gray-200" for="username">Username</label>
+                                        <input id="username" type="text"
+                                            class="block w-full px-2 py-1 mt-2 text-gray-700 bg-gray-100 border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
+                                    </div>
+                    
+                                    <div>
+                                        <label class="text-gray-800 dark:text-gray-200" for="emailAddress">Email
+                                            Address</label>
+                                        <input id="emailAddress" type="email"
+                                            class="block w-full px-2 py-1 mt-2 text-gray-700 bg-gray-100 border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
+                                    </div>
+                                    <div>
+                                        <label class="text-gray-800 dark:text-gray-200" for="emailAddress">Mobile
+                                            Number</label>
+                                        <input id="mobile" type="number"
+                                            class="block w-full px-2 py-1 mt-2 text-gray-700 bg-gray-100 border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
+                                    </div>
+                                    <div>
+                                        <label class="text-gray-800 dark:text-gray-200" for="passwordConfirmation">DOB</label>
+                                        <input id="date" type="date"
+                                            class="block w-full px-2 py-1 mt-2 text-gray-700 bg-gray-100 border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
+                                    </div>
+                                    <div>
+                                        <label class="text-gray-800 dark:text-gray-200" for="passwordConfirmation">Text
+                                            Area</label>
+                                        <textarea id="textarea" type="textarea"
+                                            class="block w-full px-2  mt-2 text-gray-700 bg-gray-100 border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"></textarea>
+                                    </div>
                                 </div>
-
-                                <div>
-                                    <label class="text-white dark:text-gray-200" for="emailAddress">Email
-                                        Address</label>
-                                    <input id="emailAddress" type="email"
-                                        class="block w-full px-2 py-1 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
-                                </div>
-                                <div>
-                                    <label class="text-white dark:text-gray-200" for="emailAddress">Mobile
-                                        Number</label>
-                                    <input id="mobile" type="number"
-                                        class="block w-full px-2 py-1 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
-                                </div>
-
-
-
-
-                                <div>
-                                    <label class="text-white dark:text-gray-200" for="passwordConfirmation">DOB</label>
-                                    <input id="date" type="date"
-                                        class="block w-full px-2 py-1 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
-                                </div>
-                                <div>
-                                    <label class="text-white dark:text-gray-200" for="passwordConfirmation">Text
-                                        Area</label>
-                                    <textarea id="textarea" type="textarea"
-                                        class="block w-full px-2  mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"></textarea>
-                                </div>
-                            </div>
-
-                            <div class="flex  gap-5">
-                                <div class="flex justify-end mt-6">
-                                    <button onclick="reverseaddcustomer()"
-                                        class="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:bg-gray-600">Cancel</button>
-                                </div>
-
-                                <div class="flex justify-end mt-6">
-                                    <button onclick="saveCustomer()"
-                                        class="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:bg-gray-600">Save</button>
+                    
+                                <div class="flex  gap-5">
+                                    <div class="flex justify-end mt-6">
+                                        <button onclick="reverseaddcustomer()"
+                                            class="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:bg-gray-600">Cancel</button>
+                                    </div>
+                    
+                                    <div class="flex justify-end mt-6">
+                                        <button onclick="saveCustomer()"
+                                            class="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:bg-gray-600">Save</button>
+                                    </div>
                                 </div>
                             </div>
                         </section>
-
-
                     </add_customer>
+                    
 
                     <div>
                         <!-- component -->
-                        <content id="second_content">
-
-                            <div class="p-2 mt-5 w-full">
-
-                                <div class='w-full px-2 '>
-                                    <div
-                                        class="relative flex items-center w-full h-12 rounded-lg focus-within:shadow-lg bg-gray-100 overflow-hidden">
-                                        <div class="grid place-items-center h-full w-12 text-gray-800">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-                                                viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                            </svg>
-                                        </div>
-
-                                        <input
-                                            class="peer h-full w-full outline-none text-sm bg-gray-100 text-black pr-2"
-                                            type="text" id="search_product" placeholder="Search something.." />
-                                    </div>
-                                    <div id="productSuggestions"></div>
-
-                                </div>
-                            </div>
-                    </div>
-                    </content>
+                        
 
 
                                        
 <div id="Payment_gateway"  class="hidden">
-    <div class=" m-5 mt-2  border-2 border-gray-300 p-5  pt-0">
-        <div class=" bg-stone-100 border-b-2 border-gray-200"><h1 class="p-2">Create Payment</h1></div>
+    <div class=" m-5 mt-2    p-5  pt-0">
+        <div class="w-full bg-stone-100 "><h1 class="text-center text-lg font-medium p-2">Create Payment</h1></div>
 
-        <div class="text-center mt-2  text-2xl">
+        <div class="text-center mt-4  text-sm">
             <h1 id="cname">Walk In Customer</h1>
         </div>
 
@@ -244,6 +248,7 @@
                                 <label  for="">DISCOUNT</label>
                                 <label id="tds" for="">2</label>
                             </div>
+                           
                             <div class="flex justify-between font-bold border-b-2 p-2 border-gray-200">
                                 <label  for="">Total</label>
                                 <label id="tas5" for="">-</label>
@@ -271,7 +276,7 @@
                     <div class="mr-20 mt-14">
                         <div class="flex flex-col  gap-1 font-semibold">
                             <label for="" class="text-sm">Payment Choice</label>
-                            <select id="paymentc" class="text-sm border-2 rounded-none p-1 border-gray-200" name="cars" id="cars">
+                            <select id="paymentc"  class="text-sm border-2 rounded-none p-1 border-gray-200" name="cars" id="cars">
                                 <option class="rounded-none" value="Cash">Cash</option>
                                 <option class="rounded-none" value="Online">Online</option>
                             
@@ -297,6 +302,7 @@
             </div>
         </main>
     </div>
+</div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('incrementBtn').addEventListener('click', function () {
@@ -401,11 +407,12 @@
                 // Add product to saleItems array with quantity of 1
                 product.quantity = 1;
                 product.subtotal = product.selling_price;
-                updateTotalPayable()
 
 
 
                 saleItems.push(product);
+                updateTotalPayable()
+
             }
 
 
@@ -413,6 +420,7 @@
 
             // Update sale items in the UI
             renderSaleItems();
+
 
         }
         // function updateTotalAmount() {
@@ -433,7 +441,8 @@
             const tbody = document.querySelector('.sale-items tbody');
             if (!tbody) return; // Exit if tbody is null
 
-            tbody.innerHTML = ''; // Clear previous sale items
+            tbody.innerHTML = '';
+ // Clear previous sale items
 
             saleItems.forEach((product, index) => {
                 const row = document.createElement('tr');
@@ -515,6 +524,7 @@
                 });
 
 
+
                 // Add event listener to price input field
                 const productPriceInput = row.querySelector('.productPriceInput');
                 productPriceInput.addEventListener('input', () => {
@@ -548,7 +558,7 @@
                 });
             });
         }
-
+        updateTotalPayable();
 
     </script>
 
@@ -759,12 +769,12 @@
             document.getElementById('tas').value=total.toFixed(2);
             document.getElementById('tas5').innerText="₹"+total.toFixed(2);
 
-            document.getElementById('pas').value=total.toFixed(2);
             document.getElementById('tps').innerText=countproduct;
 
 
             document.getElementById('tds').innerText=`₹ ${discount1} (${discount3} ${Symbol1})`;
             document.getElementById('tgs').innerText=`₹ ${gst1}  (${gst}%)`;
+            
 
 
         }
@@ -792,6 +802,7 @@
 <script>
     function paynow(){
         document.getElementById("Payment_gateway").className="block"
+        document.getElementById("first_Grid").className="hidden"
         updateTotalPayable()
    }
 </script>
@@ -879,8 +890,8 @@
         salesItems:saleItems  // use the saleItems array directly
 
     };
-
-    fetch('/sales/create_sale/66327743e28d90eeed1aea1f', {
+    sale_id_edit=document.getElementById("sale_id_edit").innerHTML
+    fetch(`/sales/create_sale/${sale_id_edit}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -903,6 +914,8 @@
 <script>
     function cancelForm(){
         document.getElementById("Payment_gateway").className="hidden"
+        document.getElementById("first_Grid").className="block"
+
     }
 </script>
 
@@ -911,8 +924,11 @@
   
 // Update the onload function to call renderSaleItems after populating the form fields
 window.onload = function() {
+
+sale_id_edit=document.getElementById("sale_id_edit").innerHTML
+
 // Replace 'api/get_sale_details' with your actual backend API endpoint
-fetch(`/sales/get_sale_details/66327743e28d90eeed1aea1f`, {
+fetch(`/sales/get_sale_details/${sale_id_edit}`, {
     method: 'GET',
     headers: {
         'Content-Type': 'application/json'
@@ -926,6 +942,7 @@ fetch(`/sales/get_sale_details/66327743e28d90eeed1aea1f`, {
     var datetimeString = data.datetime;
     var datetime = new Date(datetimeString);
     var date = datetime.toISOString().split('T')[0];
+    document.getElementById("date_edit").value=date
     const gstString = data.GST
     const parts2 = gstString.split(/\s+|\(|\)|%/);
     const gstValue = parseFloat(parts2[3]);
@@ -936,7 +953,9 @@ fetch(`/sales/get_sale_details/66327743e28d90eeed1aea1f`, {
     const discountValue = parseFloat(parts[3]);
 
 
-    document.getElementById("gstInput").value=gstValue
+    document.getElementById("gstInput").value=gstValue    
+    document.getElementById("pas").value=data.payingAmount
+
 
     document.getElementById("discountInput").value=discountValue
 
@@ -969,6 +988,5 @@ fetch(`/sales/get_sale_details/66327743e28d90eeed1aea1f`, {
     }
 </script>
 
-</body>
 
-</html>
+{% endblock %}

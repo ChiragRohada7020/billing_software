@@ -3,11 +3,13 @@
 {% block content %}
 <div class="bg-gray-100 h-full px-0 py-0 pb-8">
     <div class="bg-gray-100 font-sans h-full">
-        <h1 class="p-5 text-lg font-semibold text-center">Sales Data</h1>
-        
+        <div class="border-gray-200 border-b-2">
+            <h1 class="p-5 text-2xl font-semibold">Sales</h1>
+        </div>
+    
       <div class="flex ">
             <!-- Search Bar -->
-            <div class=" w-full md:w-1/2 p-5 ">
+            <div class=" w-full md:w-1/2 p-5 mt-2">
                 <label for="search" class="block text-gray-700 text-sm font-bold mb-2">Search:</label>
                 <input oninput="handleSearch()" type="text" id="searchInput3" name="customer_name" placeholder="Search .." class="shadow appearance-none border rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="">
             </div>
@@ -43,6 +45,8 @@
                         <th class="px-8 py-3">Due</th>
 
                         <th class="px-8 py-3">Date</th>
+                        <th class="px-8 py-3">Action</th>
+
                     </tr>
                 </thead>
                 <tbody id="salesTableBody">
@@ -64,72 +68,26 @@
                         <td class="px-8 py-3">{{ sale.dueAmount }}</td>
 
                         <td class="px-8 py-3">{{ sale.datetime.date() }}</td>
+                        <td onclick="ha('{{ sale._id }}')" class="px-8 py-3 hover:cursor-pointer"><img class="w-6" src="https://cdn-icons-png.freepik.com/512/7066/7066144.png" alt=""></td>
+                        <td id="{{ sale._id }}" class="hidden">
+                            <div class="absolute bg-white border-gray-100 border-2 shadow-md  right-20 mt-5 h-max w-max">
+                                <ul class="p-4 pt-1 text-start ">
+                                    <li  class="p-1"><a href="/sales/create_sale/{{sale._id}}">Edit Sale</a></li>
+                                    <li class="p-1">Edit</li>
+                                    <li class="p-1">ShowPayment</li>
+                                </ul>
+                            </div>
+                        </td>
+
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
        </div>
-       <button data-drawer-target="default-sidebar" data-drawer-toggle="default-sidebar" aria-controls="default-sidebar" type="button" class="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
-   <span class="sr-only">Open sidebar</span>
-   <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-      <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
-   </svg>
-</button>
-
-<aside id="default-sidebar" class="hidden fixed top-0 right-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidenav">
-  <div class="overflow-y-auto py-5 px-3 h-full bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-      <ul class="space-y-2">
-          <li>
-              <a href="#" class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                  <svg aria-hidden="true" class="w-6 h-6 text-gray-400 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path></svg>
-                  <span class="ml-3">Overview</span>
-              </a>
-          </li>
-          <li>
-              <button type="button" class="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="dropdown-pages" data-collapse-toggle="dropdown-pages">
-                  <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-400 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg>
-                  <span class="flex-1 ml-3 text-left whitespace-nowrap">Pages</span>
-                  <svg aria-hidden="true" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-              </button>
-              <ul id="dropdown-pages" class="hidden py-2 space-y-2">
-                  <li>
-                      <a href="#" class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Settings</a>
-                  </li>
-                  <li>
-                      <a href="#" class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Kanban</a>
-                  </li>
-                  <li>
-                      <a href="#" class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Calendar</a>
-                  </li>
-              </ul>
-          </li>
-          <li>
-              <button type="button" class="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="dropdown-sales" data-collapse-toggle="dropdown-sales">
-                  <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-400 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd"></path></svg>
-                  <span class="flex-1 ml-3 text-left whitespace-nowrap">Sales</span>
-                  <svg aria-hidden="true" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-              </button>
-              <ul id="dropdown-sales" class="hidden py-2 space-y-2">
-                      <li>
-                          <a href="#" class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Products</a>
-                      </li>
-                      <li>
-                          <a href="#" class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Billing</a>
-                      </li>
-                      <li>
-                          <a href="#" class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Invoice</a>
-                      </li>
-              </ul>
-          </li>
-         
-         
-      </ul>
       
-  </div>
-  
-  </div>
-</aside>
+
+
     </div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -166,6 +124,14 @@
                 <td class="px-8 py-3">${formatPaymentStatus(sale.payment_status)}</td>
                 <td class="px-8 py-3">${sale.dueAmount}</td>
                 <td class="px-8 py-3">${formatDate(sale.datetime)}</td>
+                <td onclick="ha('${sale._id}' )"  class="px-8 py-3 hover:cursor-pointer "><img  class="w-5" src="https://cdn-icons-png.freepik.com/512/7066/7066144.png" alt=""></td>
+                <td id="${sale._id}" class="hidden"><div  class="absolute bg-white border-gray-100 border-2 shadow-sm  right-20 mt-5 h-max w-max">
+                 <ul class="p-4 pt-1 text-start ">
+                 <li class="p-1">Sale Details</li>
+                     <li class="p-1" >Edit Sale </li>
+                <li class="p-1">Show Payment</li>
+
+        </ul></div></td>
             `;
             tableBody.appendChild(row);
         });
@@ -184,9 +150,30 @@
 
     // Helper function to format date
     function formatDate(dateStr) {
-        // Implement date formatting logic according to your requirement
-        return dateStr;
+        const date = new Date(dateStr);
+    
+    // Extract date components
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-based
+    const day = date.getDate().toString().padStart(2, '0');
+
+    // Construct formatted date string (YYYY-MM-DD)
+    const formattedDate = `${year}-${month}-${day}`;
+    
+    return formattedDate;    
     }
 </script>
 
+
+
+<script>
+       function ha(sale_id) {
+        var element = document.getElementById(sale_id);
+        if (element.classList.contains("hidden")) {
+            element.classList.remove("hidden");
+        } else {
+            element.classList.add("hidden");
+        }
+    }
+</script>
 {% endblock %}

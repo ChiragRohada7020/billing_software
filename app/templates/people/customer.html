@@ -1,0 +1,271 @@
+{% extends "./index.html" %}
+
+{% block content %}
+
+
+<div class="bg-gray-100 h-full px-0 py-0 pb-8">
+    <div class="bg-gray-100 font-sans h-full">
+        <div class="border-gray-200 border-b-2">
+            <h1 class="p-5 text-2xl font-semibold">Customer</h1>
+        </div>
+
+    
+      <div class="flex ">
+            <!-- Search Bar -->
+            <div class=" w-full md:w-1/2 p-5 mt-2">
+                <label for="search" class="block text-gray-700 text-sm font-bold mb-2">Search:</label>
+                <input oninput="handleSearch()" type="text" id="searchInput3" name="customer_name" placeholder="Search .." class="shadow appearance-none border rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="">
+            </div>
+
+           
+
+      </div>
+      <add_customer id="addcustomerform" class="hidden">
+
+        <!-- component -->
+        <section class="fixed inset-0 flex items-center justify-center bg-gray-700 bg-opacity-75">
+            <div class="max-w-8xl p-6 mx-auto bg-gray-200 rounded-md shadow-md ">
+                <h1 class="text-lg font-bold text-gray-800 capitalize ">Add Customer</h1>
+                <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2 text-xs">
+                    <div>
+                        <label class="text-gray-800 " for="username">Username</label>
+                        <input id="username" type="text"
+                            class="block w-full px-2 py-1 mt-2 text-gray-700 bg-gray-100 border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
+                    </div>
+                    <input class="hidden" id="customer_id" for=""></label>
+                    <div>
+                        <label class="text-gray-800 " for="emailAddress">Email
+                            Email</label>
+                        <input id="emailAddress" type="email"
+                            class="block w-full px-2 py-1 mt-2 text-gray-700 bg-gray-100 border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
+                    </div>
+                    <div>
+                        <label class="text-gray-800 " for="emailAddress">Mobile
+                            Number</label>
+                        <input id="mobile" type="number"
+                            class="block w-full px-2 py-1 mt-2 text-gray-700 bg-gray-100 border border-gray-300 rounded-md  focus:border-blue-500  focus:outline-none focus:ring">
+                    </div>
+                    <div>
+                        <label class="text-gray-800 " for="passwordConfirmation">DOB</label>
+                        <input id="date" type="date"
+                            class="block w-full px-2 py-1 mt-2 text-gray-700 bg-gray-100 border border-gray-300 rounded-md   focus:border-blue-500  focus:outline-none focus:ring">
+                    </div>
+                    <div>
+                        <label class="text-gray-800 " for="passwordConfirmation">Text
+                            Note</label>
+                        <textarea id="note" type="textarea"
+                            class="block w-full px-2  mt-2 text-gray-700 bg-gray-100 border border-gray-300 rounded-md  focus:border-blue-500  focus:outline-none focus:ring"></textarea>
+                    </div>
+                </div>
+    
+                <div class="flex  gap-5">
+                    <div class="flex justify-end mt-6">
+                        <button onclick="reverseaddcustomer()"
+                            class="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:bg-gray-600">Cancel</button>
+                    </div>
+    
+                    <div class="flex justify-end mt-6">
+                        <button onclick="saveCustomer()"
+                            class="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:bg-gray-600">Save</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </add_customer>
+
+  
+
+      <div class="flex justify-between bg-gray-100 m-2 ">
+        <div>
+    
+        </div>
+<div>
+    <button type="submit" value="Filter" class="border-2 border-purple-600  rounded-sm text-sm px-4 p-1 text-purple-800   mr-5">Filter</button>
+    <button type="submit" value="Filter" class="border-2 border-green-600  rounded-sm text-sm px-4 p-1 text-green-800   mr-5">Pdf</button>
+
+</div>
+    </div> 
+
+       <div class="bg-gray-50 m-5 mt-0  shadow-md  ">
+
+        <div class="container mx-auto  bg-gray-50">
+            <table class="min-w-full text-sm table-auto   border-collapse border border-gray-300">
+                <thead>
+                    <tr class="border-b-2  border-gray-300">
+                        <th class="px-8 py-3">Customer Name</th>
+                        <th class="px-8 py-3">Email Id</th>
+                        <th class="px-8 py-3">Mobile</th>
+                        <th class="px-8 py-3">DOB</th>
+                        <th class="px-8 py-3">Note</th>
+                        <th class="px-8 py-3">Action</th>
+
+
+                        <!-- <th class="px-8 py-3">Date</th>
+                        <th class="px-8 py-3">Action</th> -->
+
+                    </tr>
+                </thead>
+                <tbody id="salesTableBody">
+            
+                </tbody>
+            </table>
+        </div>
+       </div>
+      
+
+
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    // Function to handle search
+    function handleSearch() {
+        var searchQuery = document.getElementById('searchInput3').value;
+        console.log(searchQuery)
+        // Send search query to server
+        fetch('/Users/customer_data?searchTerm=' + encodeURIComponent(searchQuery))
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                // Render search results
+                renderCustomerTable(data);
+            });
+    }
+
+    // Function to render sales table
+    function renderCustomerTable(salesData) {
+        var tableBody = document.getElementById('salesTableBody');
+        tableBody.innerHTML = ''; // Clear previous data
+        
+        // Iterate over sales data and create table rows
+        salesData.forEach(customer => {
+            var row = document.createElement('tr');
+            row.className = 'text-sm text-center';
+            row.innerHTML = `
+                <td class="px-8 py-3">${customer.customer_name}</td>
+                <td class="px-8 py-3">${customer.customer_email}</td>
+                <td class="px-8 py-3">${customer.customer_mobile}</td>
+                <td class="px-8 py-3">${customer.customer_dob}</td>
+                <td class="px-8 py-3">${customer.customer_notes}</td>
+                <td onclick="ha('${customer.customer_id}' )"  class="px-8 py-3 hover:cursor-pointer "><img  class="w-5" src="https://cdn-icons-png.freepik.com/512/7066/7066144.png" alt=""></td>
+
+                <td id="${customer.customer_id}" class="hidden"><div  class="absolute bg-white border-gray-100 border-2 shadow-sm  right-20 mt-5 h-max w-max">
+                 <ul class="p-4 pt-1 text-start ">
+                 <li onclick="addcustomer('${customer.customer_id}','${customer.customer_name}','${customer.customer_email}','${customer.customer_mobile}','${customer.customer_dob}','${customer.customer_notes}')"  class="p-1 hover:cursor-pointer">Customer Edit</li>
+                     <li class="p-1" >Edit Sale </li>
+                <li class="p-1">Show Payment</li>
+
+        </ul></div></td>
+               
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    // Helper function to format payment status
+    
+
+    // Helper function to format date
+    function formatDate(dateStr) {
+        const date = new Date(dateStr);
+    
+    // Extract date components
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-based
+    const day = date.getDate().toString().padStart(2, '0');
+
+    // Construct formatted date string (YYYY-MM-DD)
+    const formattedDate = `${year}-${month}-${day}`;
+    
+    return formattedDate;    
+    }
+    window.onload = handleSearch;
+
+</script>
+
+
+
+<script>
+       function ha(customer_id) {
+        var element = document.getElementById(customer_id);
+        if (element.classList.contains("hidden")) {
+            element.classList.remove("hidden");
+        } else {
+            element.classList.add("hidden");
+        }
+    }
+</script>
+<script>
+    function saveCustomer() {
+    var customer_id = document.getElementById("customer_id").value;
+    var customer_name = document.getElementById("username").value;
+    var customer_email = document.getElementById("emailAddress").value;
+    var customer_mobile = document.getElementById("mobile").value;
+    var customer_dob = document.getElementById("date").value;
+    var customer_notes = document.getElementById("note").value;
+
+    // Prepare the data to be sent to the server
+    var data = {
+        customer_id: customer_id,
+        customer_name: customer_name,
+        customer_email: customer_email,
+        customer_mobile: customer_mobile,
+        customer_dob: customer_dob,
+        customer_notes: customer_notes
+    };
+    console.log(data)
+
+    // Make an AJAX request to the backend to save the updated data
+    fetch('/Users/edit_customer', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Handle success response
+        console.log('Data saved successfully:', data);
+        reverseaddcustomer();
+        handleSearch(); 
+        // Optionally, you can update the UI to reflect the changes
+    })
+    .catch(error => {
+        // Handle error
+        console.error('There was a problem with your fetch operation:', error);
+    });
+}
+
+</script>
+<script>
+    function addcustomer(customer_id,customer_name,customer_email,customer_mobile,customer_dob,customer_notes){
+        var element = document.getElementById(customer_id);
+        element.classList.add("hidden");
+
+        document.getElementById("addcustomerform").className = "block";
+        
+        document.getElementById("customer_id").value = customer_id;
+
+        document.getElementById("username").value = customer_name;
+        document.getElementById("emailAddress").value = customer_email;
+        document.getElementById("mobile").value = customer_mobile;
+            document.getElementById("date").value = customer_dob;
+        document.getElementById("note").value = customer_notes;
+    }
+
+
+    function reverseaddcustomer()
+    {
+        document.getElementById("addcustomerform").className="hidden"
+
+    }
+</script>
+
+{% endblock %}

@@ -12,8 +12,12 @@ index_bp = Blueprint('index', __name__)
 @index_bp.route('/', methods=['GET'])
 def home():
     sales_data = sale_data()
+    roles_data=db.Roles.find_one()
+    print(roles_data.get("product"))
+    
+    lo=int(roles_data.get("product"))
     # number_of_sales = sales_data.get('number_of_sales', 0)  # Using .get() to avoid KeyError
-    return render_template("index.html", total_sales_amount=sales_data['total_sales_today'],percentage_change_sales=sales_data['percentage_change'],num_sales_today=sales_data['num_sales_today'],percentage_change_customer=sales_data['percentage_change_customer'])
+    return render_template("index.html",lo=lo, total_sales_amount=sales_data['total_sales_today'],percentage_change_sales=sales_data['percentage_change'],num_sales_today=sales_data['num_sales_today'],percentage_change_customer=sales_data['percentage_change_customer'])
 
 
 @index_bp.route('/search_routes', methods=['POST'])

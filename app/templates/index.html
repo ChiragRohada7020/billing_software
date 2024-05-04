@@ -1341,7 +1341,7 @@ video {
 }
     </style>
 </head>
-<body class="text-gray-800 font-inter">
+<body class="text-gray-800  font-inter">
     <!--sidenav -->
     <div class="fixed left-0 top-0 w-64 h-full bg-[#f8f4f3] p-4 z-50 sidebar-menu transition-transform">
         <a href="#" class="flex items-center pb-4 border-b border-b-gray-800">
@@ -1351,7 +1351,7 @@ video {
         <ul class="mt-4">
             <span class="text-gray-400 font-bold">ADMIN</span>
             <li class="mb-1 group">
-                <a href="" class="flex font-semibold items-center py-2 px-4 text-gray-900 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                <a href="/" class="flex font-semibold items-center py-2 px-4 text-gray-900 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
                     <i class="ri-home-2-line mr-3 text-lg"></i>
                     <span class="text-sm">Dashboard</span>
                 </a>
@@ -1371,6 +1371,7 @@ video {
                     </li> 
                 </ul>
             </li>
+            {% if lo %}
             <li class="mb-1 group">
                 <a href="" class="flex font-semibold items-center py-2 px-4 text-gray-900 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
                     <i class='bx bx-user mr-3 text-lg'></i>                
@@ -1398,6 +1399,36 @@ video {
                     </li>
                 </ul>
             </li>
+            {% endif %}
+
+            <li class="mb-1 group">
+              <a href="" class="flex font-semibold items-center py-2 px-4 text-gray-900 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
+                  <i class='bx bx-user mr-3 text-lg'></i>                
+                  <span class="text-sm">Sales</span>
+                  <i class="ri-arrow-right-s-line ml-auto group-[.selected]:rotate-90"></i>
+              </a>
+              <ul class="pl-7 mt-2 hidden group-[.selected]:block">
+                  <li class="mb-4">
+                      <a href="{{ url_for('sales.get_sales') }}" class="text-gray-900 text-sm flex items-center hover:text-[#f84525] before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Sales</a>
+                  </li> 
+                  <li class="mb-4">
+                      <a href="{{ url_for('product_bp.list_products') }}" class="text-gray-900 text-sm flex items-center hover:text-[#f84525] before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">All Products</a>
+                  </li> 
+                  <li class="mb-4">
+                      <a href="" class="text-gray-900 text-sm flex items-center hover:text-[#f84525] before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Print Labels </a>
+                  </li>
+                  <li class="mb-4">
+                      <a href="" class="text-gray-900 text-sm flex items-center hover:text-[#f84525] before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Brand</a>
+                  </li>
+                  <li class="mb-4">
+                      <a href="" class="text-gray-900 text-sm flex items-center hover:text-[#f84525] before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Unit</a>
+                  </li>
+                  <li class="mb-4">
+                      <a href="" class="text-gray-900 text-sm flex items-center hover:text-[#f84525] before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Category</a>
+                  </li>
+              </ul>
+          </li>
+
             <li class="mb-1 group">
                 <a href="" class="flex font-semibold items-center py-2 px-4 text-gray-900 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
                     <i class='bx bx-list-ul mr-3 text-lg'></i>                

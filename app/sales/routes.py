@@ -133,7 +133,7 @@ def edit_sale(sale_id):
                 return jsonify({"message": "No data provided for editing the sale."}), 400
             
 
-    return render_template("sales/create_sale.html",)  
+    return render_template("sales/create_sale.html",sale_id=sale_id)  
 
 @sales_bp.route('/search', methods=['get'])
 def search_sales():
@@ -207,8 +207,12 @@ def get_sales():
 
     # Fetch filtered sales records from MongoDB
     sales_data = sales_collection.find(query)
+    roles_data=db.Roles.find_one()
+    print(roles_data.get("product"))
+    
+    lo=int(roles_data.get("product"))
 
     # Convert MongoDB cursor to JSON
 
     # Return JSON response
-    return render_template("sales/sales.html", sales=sales_data)
+    return render_template("sales/sales.html", sales=sales_data,lo=lo)

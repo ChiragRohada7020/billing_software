@@ -13,6 +13,8 @@ from app.index.routes import index_bp
 
 # from app.purchase.routes import purchase_bp
 from app.product.routes import product_bp
+from app.Users.routes import Users
+
 from app.pos.routes import pos_bp
 
 # from app.parties.routes import parties_bp
@@ -20,6 +22,8 @@ from app.pos.routes import pos_bp
 # from app.reports.routes import reports_bp
 
 app.register_blueprint(sales_bp, url_prefix='/sales')
+app.register_blueprint(Users, url_prefix='/Users')
+
 app.register_blueprint(index_bp, url_prefix='/')
 
 # app.register_blueprint(purchase_bp, url_prefix='/purchase')
