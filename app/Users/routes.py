@@ -13,7 +13,7 @@ Users = Blueprint('Users', __name__)
 
 
 
-@Users.route('/customer_Data', methods=['GET'])
+@Users.route('/customers', methods=['GET'])
 def customer_data():
     return render_template("people/customer.html")
     

@@ -13,6 +13,34 @@
 
 <body class="bg-white">
 
+    <div id="interval_save" class="hidden">
+        <div class=" bg-green-100 border z-10 h-16   border-green-400 text-green-700 px-4 py-3 rounded fixed  top-0  w-full " role="alert">
+           <div class="mt-2">
+            <strong class="font-bold ">Do You Want To Continue</strong>
+            <span class="block sm:inline"></span>
+            <button class="absolute right-20 text-green-800   " onclick="submitForm()">Continue</button>
+
+            
+            <span class="absolute right-0 px-5">
+              <svg onclick="submit_interval()"  class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+            </span>
+           </div>
+        </div>
+    </div>
+    <div id="interval_error" class="hidden">
+        <div class=" bg-red-100 border z-10 h-16 border-red-400 text-red-700 px-4 py-3 rounded fixed  top-0  w-full " role="alert">
+           <div class="mt-2">
+            <strong class="font-bold">Error In Pos</strong>
+            <span class="block sm:inline">Try Again</span>
+
+            
+            <span  class="absolute right-0 px-5">
+              <svg onclick="submit_interval()" class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+            </span>
+           </div>
+        </div>
+    </div>
+
      <div class="justify-center mx-auto  ">
         
 
@@ -56,7 +84,10 @@
                                         <!-- Remove the nasty inline CSS fixed height on production and replace it with a CSS class — this is just for demonstration purposes! -->
                                         <tbody class=" flex flex-col items-center  overflow-y-scroll w-full"
                                             style="height: 45vh;">
+<tr class="flex w-full ">
+    <td class="bg-gray-200 font-medium   w-full p-3">No Available Data</td>
 
+</tr>
 
                                         </tbody>
                                     </table>
@@ -186,6 +217,7 @@
                             </div>
                     </div>
                     </content>
+                    
 
 
                                        
@@ -274,10 +306,12 @@
                 </div>
                 <div class="mt-10 flex gap-10">
                            
-                    <button onclick="submitForm()"  class="text-white bg-purple-600 p-2 px-4  rounded-lg">Submit</button>
+                    <button onclick="submit_interval()"  class="text-white bg-purple-600 p-2 px-4  rounded-lg">Submit</button>
                     <button onclick="cancelForm()"  class="text-white bg-red-700 p-2  px-4 rounded-lg">Cancel</button>
     
                 </div>
+
+                
             </div>
 
         </div>
@@ -829,6 +863,37 @@
 </script>
 
 <script>
+close_interval=0
+function submit_interval(){
+    paying=document.getElementById('tas').value;
+
+    if (close_interval==0){
+        if (paying>0){
+
+document.getElementById("interval_save").className="block"
+document.getElementById("interval_error").className="hidden"
+close_interval=1
+
+}
+else
+{
+document.getElementById("interval_error").className="block"
+document.getElementById("interval_save").className="hidden"
+close_interval=1
+
+
+}
+    }
+    else{
+        document.getElementById("interval_error").className="hidden"
+        document.getElementById("interval_save").className="hidden"
+        close_interval=0
+
+
+    }
+    
+}
+
     function submitForm() {
     const totalAmount = document.getElementById('tas').value;
     const payingAmount = document.getElementById('pas').value;
@@ -887,6 +952,8 @@
     .then(data => {
         // Handle success
         alert(data.message);
+        location.reload(); // Reload the page
+
     })
     .catch(error => {
         // Handle error

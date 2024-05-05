@@ -124,11 +124,11 @@
                 <td class="px-8 py-3">${formatPaymentStatus(sale.payment_status)}</td>
                 <td class="px-8 py-3">${sale.dueAmount}</td>
                 <td class="px-8 py-3">${formatDate(sale.datetime)}</td>
-                <td onclick="ha('${sale._id}' )"  class="px-8 py-3 hover:cursor-pointer "><img  class="w-5" src="https://cdn-icons-png.freepik.com/512/7066/7066144.png" alt=""></td>
-                <td id="${sale._id}" class="hidden"><div  class="absolute bg-white border-gray-100 border-2 shadow-sm  right-20 mt-5 h-max w-max">
+                <td onclick="ha('${sale.customer_id}' )"  class="px-8 py-3 hover:cursor-pointer "><img  class="w-5" src="https://cdn-icons-png.freepik.com/512/7066/7066144.png" alt=""></td>
+                <td id="${sale.customer_id}" class="hidden"><div  class="absolute bg-white border-gray-100 border-2 shadow-sm  right-20 mt-5 h-max w-max">
                  <ul class="p-4 pt-1 text-start ">
-                 <li class="p-1">Sale Details</li>
-                     <li class="p-1" >Edit Sale </li>
+                 <li class="p-1"><a href="/sales/create_sale/${sale.customer_id}">Sale Details</a></li>
+                     <li class="p-1" ><a href="/sales/create_sale/${sale.customer_id}">Edit Sale</a></li>
                 <li class="p-1">Show Payment</li>
 
         </ul></div></td>
